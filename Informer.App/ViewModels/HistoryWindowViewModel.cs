@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Informer.App.Localization;
 using Informer.Core.Dto;
 using Informer.Core.Entities;
 using Informer.Core.Services;
@@ -31,7 +32,7 @@ public partial class HistoryWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isLoading;
 
-    private const string AllSendersLabel = "Все отправители";
+    private static string AllSendersLabel => LocalizationManager.Get("AllSendersOption");
 
     public HistoryWindowViewModel()
     {
@@ -39,6 +40,7 @@ public partial class HistoryWindowViewModel : ObservableObject
         _bus = Informer.App.Program.Services.GetRequiredService<NotificationBus>();
 
         _bus.NotificationReceived += OnNotificationReceived;
+        LocalizationManager.LanguageChanged += OnLanguageChanged;
 
         _ = LoadAsync();
     }
@@ -46,6 +48,7 @@ public partial class HistoryWindowViewModel : ObservableObject
     public void Cleanup()
     {
         _bus.NotificationReceived -= OnNotificationReceived;
+        LocalizationManager.LanguageChanged -= OnLanguageChanged;
     }
 
     private void OnNotificationReceived(Notification notification)
@@ -53,10 +56,39 @@ public partial class HistoryWindowViewModel : ObservableObject
         Dispatcher.UIThread.Post(() => _ = LoadAsync());
     }
 
+    private void OnLanguageChanged(AppLanguage language)
+    {
+        var wasShowingAll = SelectedSender == AllSendersLabel || Senders.Count == 0 || SelectedSender == Senders.FirstOrDefault();
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (wasShowingAll)
+            {
+                SelectedSender = AllSendersLabel;
+            }
+
+            _ = LoadAsync();
+        });
+    }
+
     partial void OnSelectedSenderChanged(string value) => _ = LoadAsync();
 
     [RelayCommand]
     private async Task Refresh() => await LoadAsync();
+
+    public async Task DeleteNotificationAsync(NotificationRowViewModel row)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
+
+        var entity = await db.Notifications.FindAsync(row.Id);
+        if (entity is not null)
+        {
+            db.Notifications.Remove(entity);
+            await db.SaveChangesAsync();
+        }
+
+        Notifications.Remove(row);
+    }
 
     private async Task LoadAsync()
     {
@@ -115,20 +147,5 @@ public partial class HistoryWindowViewModel : ObservableObject
                 Senders.Insert(i, desired[i]);
             }
         }
-    }
-
-    public async Task DeleteNotificationAsync(NotificationRowViewModel row)
-    {
-        using var scope = _scopeFactory.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
-
-        var entity = await db.Notifications.FindAsync(row.Id);
-        if (entity is not null)
-        {
-            db.Notifications.Remove(entity);
-            await db.SaveChangesAsync();
-        }
-
-        Notifications.Remove(row);
     }
 }

@@ -17,14 +17,15 @@
     <SolidColorBrush x:Key="FlyoutTextPrimaryBrush" Color="#F2F2F2" />
     <SolidColorBrush x:Key="FlyoutTextSecondaryBrush" Color="#9A9AA0" />
     <SolidColorBrush x:Key="FlyoutDangerBrush" Color="#F27272" />
-    <SolidColorBrush x:Key="FlyoutSuccessBrush" Color="#5FD68C" />
     <SolidColorBrush x:Key="FlyoutWarningBrush" Color="#F2C94C" />
+    <SolidColorBrush x:Key="FlyoutSuccessBrush" Color="#5FD68C" />
     <CornerRadius x:Key="FlyoutCornerRadius">12</CornerRadius>
   </Application.Resources>
 
   <TrayIcon.Icons>
     <TrayIcons>
-      <TrayIcon Icon="/Assets/tray-icon.ico"
+      <TrayIcon 
+                Icon="/Assets/tray-icon.ico"
                 ToolTipText="Информер"
                 IsVisible="True">
         <TrayIcon.Menu>

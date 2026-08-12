@@ -27,4 +27,5 @@ public class AppSettingsEntity
     public bool ShowInfoToasts { get; set; } = true;
     public bool ShowWarningToasts { get; set; } = true;
     public bool ShowErrorToasts { get; set; } = true;
+    public string Language { get; set; } = "";
 }

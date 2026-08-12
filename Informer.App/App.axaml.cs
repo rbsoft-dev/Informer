@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -6,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using Informer.App.Localization;
 using Informer.App.Services;
 using Informer.App.ViewModels;
 using Informer.App.Views;
@@ -31,8 +33,14 @@ public partial class App : Application
 
     private NotificationBus? _bus;
 
+    private NativeMenuItem? _historyMenuItem;
+    private NativeMenuItem? _settingsMenuItem;
+    private NativeMenuItem? _exitMenuItem;
+
     public override void OnFrameworkInitializationCompleted()
     {
+        ResolveTrayMenuItems();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -46,10 +54,72 @@ public partial class App : Application
             };
         }
 
+        LocalizationManager.LanguageChanged += UpdateTrayMenuText;
+        ApplyStartupLanguage();
+
         StartNotificationListener();
         StartBackgroundCleanup();
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void ResolveTrayMenuItems()
+    {
+        var icons = TrayIcon.GetIcons(this);
+        var menu = icons?.Count > 0 ? icons[0].Menu : null;
+        if (menu is null) return;
+
+        _historyMenuItem = menu.Items.ElementAtOrDefault(0) as NativeMenuItem;
+        _settingsMenuItem = menu.Items.ElementAtOrDefault(1) as NativeMenuItem;
+        _exitMenuItem = menu.Items.ElementAtOrDefault(3) as NativeMenuItem;
+    }
+
+    private static void ApplyStartupLanguage()
+    {
+        var language = AppLanguage.Russian;
+        try
+        {
+            using var scope = Program.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<Informer.Data.InformerDbContext>();
+            var settings = db.AppSettings.FirstOrDefault();
+
+            if (settings is null)
+            {
+                LocalizationManager.Apply(language);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(settings.Language))
+            {
+                language = DetectSystemLanguage();
+                settings.Language = language == AppLanguage.English ? "en" : "ru";
+                db.SaveChanges();
+            }
+            else
+            {
+                language = settings.Language == "en" ? AppLanguage.English : AppLanguage.Russian;
+            }
+        }
+        catch
+        {
+        }
+
+        LocalizationManager.Apply(language);
+    }
+
+    private static AppLanguage DetectSystemLanguage()
+    {
+        var twoLetterCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        return twoLetterCode.Equals("ru", StringComparison.OrdinalIgnoreCase)
+            ? AppLanguage.Russian
+            : AppLanguage.English;
+    }
+
+    private void UpdateTrayMenuText(AppLanguage language)
+    {
+        if (_historyMenuItem is not null) _historyMenuItem.Header = LocalizationManager.Get("TrayHistory");
+        if (_settingsMenuItem is not null) _settingsMenuItem.Header = LocalizationManager.Get("TraySettings");
+        if (_exitMenuItem is not null) _exitMenuItem.Header = LocalizationManager.Get("TrayExit");
     }
 
     private void StartNotificationListener()

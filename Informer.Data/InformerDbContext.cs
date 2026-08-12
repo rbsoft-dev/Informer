@@ -3,12 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Informer.Data;
 
-/// <summary>
-/// EF Core context. Deliberately provider-agnostic: the concrete provider (SQLite by
-/// default, but swappable to SQL Server / PostgreSQL / etc.) is configured by the caller
-/// via <see cref="DbContextOptions{TContext}"/> in Program.cs — nothing here references
-/// a specific provider, so "use any DB through EF Core" (requirement) is satisfied.
-/// </summary>
 public class InformerDbContext : DbContext
 {
     public InformerDbContext(DbContextOptions<InformerDbContext> options) : base(options)
@@ -29,10 +23,9 @@ public class InformerDbContext : DbContext
             e.Property(n => n.Sender).IsRequired().HasMaxLength(256);
             e.Property(n => n.Description).HasMaxLength(2000);
             e.Property(n => n.ResponseBodyJson).IsRequired();
-            // Sender is queried/filtered constantly from the history view -> index it.
+            e.Property(n => n.Severity).HasConversion<string>().HasMaxLength(20);
             e.HasIndex(n => n.Sender);
             e.HasIndex(n => n.CreatedAtUtc);
-            e.Property(n => n.Severity).HasConversion<string>().HasMaxLength(20);
         });
 
         modelBuilder.Entity<ApiKeyEntity>(e =>
@@ -45,19 +38,19 @@ public class InformerDbContext : DbContext
         modelBuilder.Entity<AppSettingsEntity>(e =>
         {
             e.HasKey(s => s.Id);
-            // Single-row settings table, always Id = 1.
             e.HasData(new AppSettingsEntity
             {
                 Id = 1,
                 RetentionDays = 30,
                 RequireApiKey = true,
                 ToastDisplaySeconds = 8,
+                ShowInfoToasts = true,
+                ShowWarningToasts = true,
+                ShowErrorToasts = true,
                 RateLimitMaxRequests = 20,
                 RateLimitWindowSeconds = 10,
                 ListenPort = 5005,
-                ShowInfoToasts = true,
-                ShowWarningToasts = true,
-                ShowErrorToasts = true
+                Language = ""
             });
         });
     }

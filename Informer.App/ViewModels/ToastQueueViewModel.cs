@@ -1,10 +1,12 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Informer.Core.Entities;
-using System;
-using System.Collections.Generic;
+using Informer.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Informer.App.ViewModels;
 
@@ -23,10 +25,6 @@ public partial class ToastQueueViewModel : ObservableObject
 
     public bool HasPrevious => _currentIndex > 0;
     public bool HasNext => _currentIndex >= 0 && _currentIndex < _items.Count - 1;
-
-    public int? CurrentNotificationId => _currentIndex >= 0 && _currentIndex < _items.Count
-        ? _items[_currentIndex].Id
-        : null;
 
     public void AddNotification(Notification notification)
     {
@@ -76,5 +74,19 @@ public partial class ToastQueueViewModel : ObservableObject
 
         NextCommand.NotifyCanExecuteChanged();
         PreviousCommand.NotifyCanExecuteChanged();
+
+        _ = MarkAsReadAsync(current.Id);
+    }
+
+    private static async Task MarkAsReadAsync(int notificationId)
+    {
+        using var scope = Informer.App.Program.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
+        var entity = await db.Notifications.FindAsync(notificationId);
+        if (entity is not null && !entity.IsRead)
+        {
+            entity.IsRead = true;
+            await db.SaveChangesAsync();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Informer.App.Localization;
 using Informer.Core.Dto;
 using Informer.Core.Entities;
 using Informer.Data;
@@ -20,9 +21,9 @@ public partial class NotificationRowViewModel : ObservableObject
 
     public string SeverityLabel => Severity switch
     {
-        NotificationSeverity.Warning => "Предупреждение",
-        NotificationSeverity.Error => "Ошибка",
-        _ => "Сообщение"
+        NotificationSeverity.Warning => LocalizationManager.Get("SeverityWarning"),
+        NotificationSeverity.Error => LocalizationManager.Get("SeverityError"),
+        _ => LocalizationManager.Get("SeverityInfo")
     };
 
     public IBrush SeverityBrush { get; }

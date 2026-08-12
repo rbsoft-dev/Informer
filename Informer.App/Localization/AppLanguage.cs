@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Informer.Core.Entities
+namespace Informer.App.Localization
 {
-    public enum NotificationSeverity
+    public enum AppLanguage
     {
-        Info = 0,
-        Warning = 1,
-        Error = 2
+        Russian,
+        English
     }
 }
-

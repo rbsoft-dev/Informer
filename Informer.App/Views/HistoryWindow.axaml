@@ -22,7 +22,7 @@
               BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="0,0,0,1"
               PointerPressed="OnHeaderPointerPressed">
         <Grid ColumnDefinitions="*,Auto,Auto" Margin="16,10">
-          <TextBlock Grid.Column="0" Text="История уведомлений"
+          <TextBlock Grid.Column="0" Text="{DynamicResource HistoryTitle}"
                      Foreground="{StaticResource FlyoutTextPrimaryBrush}"
                      FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
           <Button x:Name="MaximizeButton" Grid.Column="1" Content="🗖" Click="OnMaximizeClick"
@@ -37,11 +37,11 @@
       </Border>
 
       <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="16,12,16,8">
-        <TextBlock Grid.Column="0" Text="Отправитель:" VerticalAlignment="Center" Margin="0,0,8,0"
+        <TextBlock Grid.Column="0" Text="{DynamicResource HistorySenderLabel}" VerticalAlignment="Center" Margin="0,0,8,0"
                    Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
         <ComboBox Grid.Column="1" ItemsSource="{Binding Senders}"
                   SelectedItem="{Binding SelectedSender}" HorizontalAlignment="Stretch" />
-        <Button Grid.Column="2" Content="Обновить" Margin="8,0,0,0"
+        <Button Grid.Column="2" Content="{DynamicResource HistoryRefreshButton}" Margin="8,0,0,0"
                 Command="{Binding RefreshCommand}" />
       </Grid>
 
@@ -53,14 +53,14 @@
                 PointerPressed="OnGridPointerPressed">
         <DataGrid.ContextMenu>
           <ContextMenu>
-            <MenuItem Header="Копировать текст" Click="OnCopyClick" />
-            <MenuItem Header="Удалить" Click="OnDeleteClick" />
+            <MenuItem Header="{DynamicResource CtxCopyText}" Click="OnCopyClick" />
+            <MenuItem Header="{DynamicResource CtxDelete}" Click="OnDeleteClick" />
           </ContextMenu>
         </DataGrid.ContextMenu>
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Время" Binding="{Binding CreatedAtLocal, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}" Width="150" IsReadOnly="True" />
-          <DataGridTextColumn Header="Отправитель" Binding="{Binding Sender}" Width="150" IsReadOnly="True" />
-          <DataGridTemplateColumn Header="Тип" Width="120">
+          <DataGridTextColumn Header="{DynamicResource ColHistoryTime}" Binding="{Binding CreatedAtLocal, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}" Width="150" IsReadOnly="True" />
+          <DataGridTextColumn Header="{DynamicResource ColHistorySender}" Binding="{Binding Sender}" Width="150" IsReadOnly="True" />
+          <DataGridTemplateColumn Header="{DynamicResource ColHistoryType}" Width="120">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate x:CompileBindings="False">
                 <TextBlock Text="{Binding SeverityLabel}" Foreground="{Binding SeverityBrush}"
@@ -68,8 +68,8 @@
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
-          <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*" IsReadOnly="True" />
-          <DataGridCheckBoxColumn Header="Прочитано" Binding="{Binding IsRead}" Width="90" IsReadOnly="False" />
+          <DataGridTextColumn Header="{DynamicResource ColHistoryDescription}" Binding="{Binding Description}" Width="*" IsReadOnly="True" />
+          <DataGridCheckBoxColumn Header="{DynamicResource ColHistoryRead}" Binding="{Binding IsRead}" Width="90" IsReadOnly="False" />
         </DataGrid.Columns>
       </DataGrid>
 

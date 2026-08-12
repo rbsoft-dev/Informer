@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Informer.App.Localization;
 using Informer.Core.Entities;
 using Informer.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace Informer.App.ViewModels;
 public partial class SettingsWindowViewModel : ObservableObject
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private bool _isLoadingLanguage;
 
     [ObservableProperty]
     private int? _retentionDays = 30;
@@ -38,6 +40,11 @@ public partial class SettingsWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private int? _rateLimitWindowSeconds = 10;
+
+    public ObservableCollection<string> LanguageOptions { get; } = new() { "Русский", "English" };
+
+    [ObservableProperty]
+    private string _selectedLanguageDisplay = "Русский";
 
     [ObservableProperty]
     private ObservableCollection<ApiKeyEntity> _apiKeys = new();
@@ -73,6 +80,10 @@ public partial class SettingsWindowViewModel : ObservableObject
             ShowErrorToasts = settings.ShowErrorToasts;
             RateLimitMaxRequests = settings.RateLimitMaxRequests;
             RateLimitWindowSeconds = settings.RateLimitWindowSeconds;
+
+            _isLoadingLanguage = true;
+            SelectedLanguageDisplay = settings.Language == "en" ? "English" : "Русский";
+            _isLoadingLanguage = false;
         }
 
         var keys = await db.ApiKeys.AsNoTracking()
@@ -81,40 +92,65 @@ public partial class SettingsWindowViewModel : ObservableObject
         ApiKeys = new ObservableCollection<ApiKeyEntity>(keys);
     }
 
+    partial void OnSelectedLanguageDisplayChanged(string value)
+    {
+        if (_isLoadingLanguage)
+        {
+            return;
+        }
+
+        var language = value == "English" ? AppLanguage.English : AppLanguage.Russian;
+        LocalizationManager.Apply(language);
+        _ = PersistLanguageAsync(language);
+    }
+
+    private async Task PersistLanguageAsync(AppLanguage language)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
+
+        var settings = await db.AppSettings.FirstOrDefaultAsync();
+        if (settings is not null)
+        {
+            settings.Language = language == AppLanguage.English ? "en" : "ru";
+            await db.SaveChangesAsync();
+        }
+    }
+
     [RelayCommand]
     private async Task Save()
     {
         if (RetentionDays is null)
         {
-            StatusMessage = "Обязательно введите количество дней хранения истории.";
+            StatusMessage = LocalizationManager.Get("ErrRetentionRequired");
             IsStatusError = true;
             return;
         }
 
         if (RetentionDays < 1)
         {
-            StatusMessage = "Количество дней хранения должно быть не меньше 1.";
+            StatusMessage = LocalizationManager.Get("ErrRetentionMin");
             IsStatusError = true;
             return;
         }
 
         if (ToastDisplaySeconds is null)
         {
-            StatusMessage = "Обязательно введите время показа тоста.";
+            StatusMessage = LocalizationManager.Get("ErrToastSecondsRequired");
             IsStatusError = true;
             return;
         }
 
         if (RateLimitMaxRequests is null)
         {
-            StatusMessage = "Обязательно введите максимум запросов для анти-спама.";
+            StatusMessage = LocalizationManager.Get("ErrRateMaxRequired");
             IsStatusError = true;
             return;
         }
 
         if (RateLimitWindowSeconds is null)
         {
-            StatusMessage = "Обязательно введите окно времени (сек) для анти-спама.";
+            StatusMessage = LocalizationManager.Get("ErrRateWindowRequired");
             IsStatusError = true;
             return;
         }
@@ -125,7 +161,7 @@ public partial class SettingsWindowViewModel : ObservableObject
         var settings = await db.AppSettings.FirstOrDefaultAsync();
         if (settings is null)
         {
-            StatusMessage = "Ошибка: таблица настроек пуста.";
+            StatusMessage = LocalizationManager.Get("ErrSettingsEmpty");
             IsStatusError = true;
             return;
         }
@@ -140,7 +176,7 @@ public partial class SettingsWindowViewModel : ObservableObject
         settings.RateLimitWindowSeconds = RateLimitWindowSeconds.Value;
 
         await db.SaveChangesAsync();
-        StatusMessage = "Настройки сохранены.";
+        StatusMessage = LocalizationManager.Get("MsgSaved");
         IsStatusError = false;
     }
 
