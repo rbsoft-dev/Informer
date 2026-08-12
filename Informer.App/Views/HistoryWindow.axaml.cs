@@ -52,6 +52,20 @@ public partial class HistoryWindow : Window
 
     private void OnCloseClick(object? sender, RoutedEventArgs e) => Close();
 
+    private void OnJumpToNewestClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not HistoryWindowViewModel vm)
+        {
+            return;
+        }
+
+        if (vm.Notifications.Count > 0)
+        {
+            HistoryGrid.ScrollIntoView(vm.Notifications[0], null);
+        }
+
+        vm.AcknowledgeNewMessages();
+    }
     private void OnGridPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (!e.GetCurrentPoint(HistoryGrid).Properties.IsRightButtonPressed)

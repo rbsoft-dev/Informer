@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -9,11 +5,16 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Informer.App.Localization;
 using Informer.App.Services;
+using Informer.App.Utilities;
 using Informer.App.ViewModels;
 using Informer.App.Views;
 using Informer.Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Informer.App;
 
@@ -36,6 +37,7 @@ public partial class App : Application
     private NativeMenuItem? _historyMenuItem;
     private NativeMenuItem? _settingsMenuItem;
     private NativeMenuItem? _exitMenuItem;
+    private TrayIcon? _trayIcon;
 
     public override void OnFrameworkInitializationCompleted()
     {
@@ -66,7 +68,8 @@ public partial class App : Application
     private void ResolveTrayMenuItems()
     {
         var icons = TrayIcon.GetIcons(this);
-        var menu = icons?.Count > 0 ? icons[0].Menu : null;
+        _trayIcon = icons?.Count > 0 ? icons[0] : null;
+        var menu = _trayIcon?.Menu;
         if (menu is null) return;
 
         _historyMenuItem = menu.Items.ElementAtOrDefault(0) as NativeMenuItem;
@@ -117,7 +120,7 @@ public partial class App : Application
 
     private void UpdateTrayMenuText(AppLanguage language)
     {
-        if (_historyMenuItem is not null) _historyMenuItem.Header = LocalizationManager.Get("TrayHistory");
+        UpdateHistoryMenuItemHeader();
         if (_settingsMenuItem is not null) _settingsMenuItem.Header = LocalizationManager.Get("TraySettings");
         if (_exitMenuItem is not null) _exitMenuItem.Header = LocalizationManager.Get("TrayExit");
     }
@@ -126,6 +129,51 @@ public partial class App : Application
     {
         _bus = Program.Services.GetRequiredService<NotificationBus>();
         _bus.NotificationReceived += OnNotificationReceivedForToast;
+        _bus.NotificationReceived += n => _ = RefreshTrayBadgeAsync();
+        _bus.ReadStatusChanged += () => _ = RefreshTrayBadgeAsync();
+
+        _ = RefreshTrayBadgeAsync();
+    }
+
+    private static async Task RefreshTrayBadgeAsync()
+    {
+        try
+        {
+            using var scope = Program.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<Informer.Data.InformerDbContext>();
+            var unread = await db.Notifications.CountAsync(n => !n.IsRead);
+
+            var app = (App)Application.Current!;
+            Dispatcher.UIThread.Post(() => app.ApplyTrayBadge(unread));
+        }
+        catch
+        {
+        }
+    }
+
+    private int _lastUnreadCount;
+
+    private void ApplyTrayBadge(int unreadCount)
+    {
+        _lastUnreadCount = unreadCount;
+
+        if (_trayIcon is not null)
+        {
+            _trayIcon.Icon = TrayBadgeRenderer.Render(unreadCount);
+            _trayIcon.ToolTipText = unreadCount > 0
+                ? $"{LocalizationManager.Get("NewMessagesTooltip")} ({unreadCount})"
+                : "Информер";
+        }
+
+        UpdateHistoryMenuItemHeader();
+    }
+
+    private void UpdateHistoryMenuItemHeader()
+    {
+        if (_historyMenuItem is null) return;
+
+        var baseText = LocalizationManager.Get("TrayHistory");
+        _historyMenuItem.Header = _lastUnreadCount > 0 ? $"{baseText} ({_lastUnreadCount})" : baseText;
     }
 
     private async void OnNotificationReceivedForToast(Informer.Core.Entities.Notification notification)
@@ -142,9 +190,11 @@ public partial class App : Application
                 try
                 {
                     EnsureToastWindow();
-                    _toastQueue!.AddNotification(notification);
 
-                    if (!_toastWindow!.IsVisible)
+                    var wasVisible = _toastWindow!.IsVisible;
+                    _toastQueue!.AddNotification(notification, anchorToIt: !wasVisible);
+
+                    if (!wasVisible)
                     {
                         _toastWindow.Show();
                     }

@@ -98,6 +98,7 @@ public static class LocalizationManager
         dict["ErrRateWindowRequired"] = "Обязательно введите окно времени (сек) для анти-спама.";
         dict["ErrSettingsEmpty"] = "Ошибка: таблица настроек пуста.";
         dict["MsgSaved"] = "Настройки сохранены.";
+        dict["NewMessagesTooltip"] = "Новые сообщения";
 
         return dict;
     }
@@ -160,6 +161,7 @@ public static class LocalizationManager
         dict["ErrRateWindowRequired"] = "Please enter the anti-spam time window (sec).";
         dict["ErrSettingsEmpty"] = "Error: settings table is empty.";
         dict["MsgSaved"] = "Settings saved.";
+        dict["NewMessagesTooltip"] = "New messages";
 
         return dict;
     }

@@ -18,13 +18,29 @@
         CornerRadius="{StaticResource FlyoutCornerRadius}" Padding="14">
     <StackPanel Spacing="6">
 
-      <Grid ColumnDefinitions="*,Auto">
-        <TextBlock Grid.Column="0" Text="{Binding Sender}"
-                   FontWeight="Bold" Foreground="{StaticResource FlyoutAccentBrush}"
-                   TextTrimming="CharacterEllipsis" />
-        <Button Grid.Column="1" Content="✕" Padding="4,0" Background="Transparent"
-                BorderThickness="0" Foreground="{StaticResource FlyoutTextSecondaryBrush}" Click="OnCloseClick" />
-      </Grid>
+      <Grid ColumnDefinitions="*,Auto,Auto">
+          <TextBlock Grid.Column="0" Text="{Binding Sender}"
+                     FontWeight="Bold" Foreground="{StaticResource FlyoutAccentBrush}"
+                     TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+          <Grid Grid.Column="1" Width="24" Height="24" Margin="0,0,4,0"
+              IsVisible="{Binding HasNewMessages}" ToolTip.Tip="{Binding NewMessagesTooltip}">
+              <Button Command="{Binding JumpToLatestCommand}"
+                      Background="Transparent" BorderThickness="0" CornerRadius="12"
+                      Width="24" Height="24" Padding="0"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Path Data="M12,22c1.1,0,2-0.9,2-2h-4C10,21.1,10.9,22,12,22z M18,16v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-0.83-0.67-1.5-1.5-1.5S10.5,3.17,10.5,4v0.68 C7.64,5.36,6,7.92,6,11v5l-2,2v1h16v-1L18,16z"
+                      Fill="{StaticResource FlyoutAccentBrush}" Stretch="Uniform" Width="15" Height="15" />
+              </Button>
+              <Border Background="{StaticResource FlyoutDangerBrush}" CornerRadius="7"
+                      Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Top"
+                      IsHitTestVisible="False">
+                <TextBlock Text="{Binding NewMessagesCount}" FontSize="9" FontWeight="Bold"
+                           Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </Grid>
+          <Button Grid.Column="2" Content="✕" Padding="4,0" Background="Transparent"
+                  BorderThickness="0" Foreground="{StaticResource FlyoutTextSecondaryBrush}" Click="OnCloseClick" />
+        </Grid>
 
       <TextBlock Text="{Binding Description}" Foreground="{StaticResource FlyoutTextPrimaryBrush}" TextWrapping="Wrap"
                  MaxLines="4" TextTrimming="CharacterEllipsis" />

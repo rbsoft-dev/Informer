@@ -1,12 +1,13 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Informer.App.Localization;
 using Informer.Core.Dto;
 using Informer.Core.Entities;
+using Informer.Core.Services;
 using Informer.Data;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Informer.App.ViewModels;
 
@@ -74,6 +75,8 @@ public partial class NotificationRowViewModel : ObservableObject
         {
             entity.IsRead = value;
             await db.SaveChangesAsync();
+
+            scope.ServiceProvider.GetRequiredService<NotificationBus>().PublishReadStatusChanged();
         }
     }
 }

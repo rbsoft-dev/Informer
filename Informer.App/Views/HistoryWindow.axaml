@@ -21,15 +21,31 @@
       <Border Grid.Row="0" Background="{StaticResource FlyoutHeaderBrush}"
               BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="0,0,0,1"
               PointerPressed="OnHeaderPointerPressed">
-        <Grid ColumnDefinitions="*,Auto,Auto" Margin="16,10">
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto" Margin="16,10">
           <TextBlock Grid.Column="0" Text="{DynamicResource HistoryTitle}"
                      Foreground="{StaticResource FlyoutTextPrimaryBrush}"
                      FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
-          <Button x:Name="MaximizeButton" Grid.Column="1" Content="🗖" Click="OnMaximizeClick"
+          <Grid Grid.Column="1" Width="24" Height="24" Margin="0,0,6,0"
+                  IsVisible="{Binding HasNewMessages}" ToolTip.Tip="{Binding NewMessagesTooltip}">
+              <Button Click="OnJumpToNewestClick"
+                      Background="Transparent" BorderThickness="0" CornerRadius="12"
+                      Width="24" Height="24" Padding="0"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Path Data="M12,22c1.1,0,2-0.9,2-2h-4C10,21.1,10.9,22,12,22z M18,16v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-0.83-0.67-1.5-1.5-1.5S10.5,3.17,10.5,4v0.68 C7.64,5.36,6,7.92,6,11v5l-2,2v1h16v-1L18,16z"
+                      Fill="{StaticResource FlyoutAccentBrush}" Stretch="Uniform" Width="15" Height="15" />
+              </Button>
+              <Border Background="{StaticResource FlyoutDangerBrush}" CornerRadius="7"
+                      Width="14" Height="14" HorizontalAlignment="Right" VerticalAlignment="Top"
+                      IsHitTestVisible="False">
+                <TextBlock Text="{Binding NewMessagesCount}" FontSize="9" FontWeight="Bold"
+                           Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </Grid>
+          <Button x:Name="MaximizeButton" Grid.Column="2" Content="🗖" Click="OnMaximizeClick"
                   Background="Transparent" BorderThickness="0"
                   Foreground="{StaticResource FlyoutTextSecondaryBrush}"
                   Padding="8,2" FontSize="14" Margin="0,0,4,0" />
-          <Button Grid.Column="2" Content="✕" Click="OnCloseClick"
+          <Button Grid.Column="3" Content="✕" Click="OnCloseClick"
                   Background="Transparent" BorderThickness="0"
                   Foreground="{StaticResource FlyoutTextSecondaryBrush}"
                   Padding="8,2" FontSize="14" />

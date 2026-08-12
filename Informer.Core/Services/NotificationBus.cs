@@ -8,4 +8,8 @@ public sealed class NotificationBus
     public event Action<Notification>? NotificationReceived;
 
     public void Publish(Notification notification) => NotificationReceived?.Invoke(notification);
+
+    public event Action? ReadStatusChanged;
+
+    public void PublishReadStatusChanged() => ReadStatusChanged?.Invoke();
 }

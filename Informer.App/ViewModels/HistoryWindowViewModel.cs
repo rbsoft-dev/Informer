@@ -32,6 +32,16 @@ public partial class HistoryWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isLoading;
 
+    [NotifyPropertyChangedFor(nameof(NewMessagesTooltip))]
+    [ObservableProperty]
+    private bool _hasNewMessages;
+
+    [NotifyPropertyChangedFor(nameof(NewMessagesTooltip))]
+    [ObservableProperty]
+    private int _newMessagesCount;
+
+    public string NewMessagesTooltip => $"{LocalizationManager.Get("NewMessagesTooltip")} ({NewMessagesCount})";
+
     private static string AllSendersLabel => LocalizationManager.Get("AllSendersOption");
 
     public HistoryWindowViewModel()
@@ -53,7 +63,18 @@ public partial class HistoryWindowViewModel : ObservableObject
 
     private void OnNotificationReceived(Notification notification)
     {
-        Dispatcher.UIThread.Post(() => _ = LoadAsync());
+        Dispatcher.UIThread.Post(() =>
+        {
+            NewMessagesCount++;
+            HasNewMessages = true;
+            _ = LoadAsync();
+        });
+    }
+
+    public void AcknowledgeNewMessages()
+    {
+        HasNewMessages = false;
+        NewMessagesCount = 0;
     }
 
     private void OnLanguageChanged(AppLanguage language)
@@ -85,6 +106,7 @@ public partial class HistoryWindowViewModel : ObservableObject
         {
             db.Notifications.Remove(entity);
             await db.SaveChangesAsync();
+            _bus.PublishReadStatusChanged();
         }
 
         Notifications.Remove(row);
