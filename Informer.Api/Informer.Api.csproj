@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Informer.Api</RootNamespace>
+    <!-- Class-library-like usage: App hosts Kestrel, this project only supplies endpoints/middleware. -->
+    <IsPackable>false</IsPackable>
+	 <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Informer.Core\Informer.Core.csproj" />
+    <ProjectReference Include="..\Informer.Data\Informer.Data.csproj" />
+  </ItemGroup>
+
+</Project>

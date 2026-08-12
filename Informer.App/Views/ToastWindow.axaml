@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Informer.App.ViewModels"
+        x:Class="Informer.App.Views.ToastWindow"
+        x:DataType="vm:ToastQueueViewModel"
+        Title="Информер"
+        Width="340" MinHeight="110" SizeToContent="Height"
+        CanResize="False"
+        SystemDecorations="None"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="Manual"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent">
+
+  <Border Background="{StaticResource FlyoutBackgroundBrush}"
+        BorderBrush="{Binding BorderColor}" BorderThickness="2"
+        CornerRadius="{StaticResource FlyoutCornerRadius}" Padding="14">
+    <StackPanel Spacing="6">
+
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Grid.Column="0" Text="{Binding Sender}"
+                   FontWeight="Bold" Foreground="{StaticResource FlyoutAccentBrush}"
+                   TextTrimming="CharacterEllipsis" />
+        <Button Grid.Column="1" Content="✕" Padding="4,0" Background="Transparent"
+                BorderThickness="0" Foreground="{StaticResource FlyoutTextSecondaryBrush}" Click="OnCloseClick" />
+      </Grid>
+
+      <TextBlock Text="{Binding Description}" Foreground="{StaticResource FlyoutTextPrimaryBrush}" TextWrapping="Wrap"
+                 MaxLines="4" TextTrimming="CharacterEllipsis" />
+
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,2,0,0" VerticalAlignment="Center">
+          <Button Grid.Column="0" Content="‹" Command="{Binding PreviousCommand}"
+                  Width="26" Height="26" Padding="0" CornerRadius="13"
+                  Background="{StaticResource FlyoutSurfaceBrush}" BorderThickness="0"
+                  FontSize="15" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                  Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+          <TextBlock Grid.Column="1" Text="{Binding PositionLabel}" HorizontalAlignment="Center"
+                     VerticalAlignment="Center" Foreground="{StaticResource FlyoutTextSecondaryBrush}" FontSize="11" />
+          <Button Grid.Column="2" Content="›" Command="{Binding NextCommand}"
+                  Width="26" Height="26" Padding="0" CornerRadius="13"
+                  Background="{StaticResource FlyoutSurfaceBrush}" BorderThickness="0"
+                  FontSize="15" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                  Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+        </Grid>
+
+      <TextBlock Text="{Binding CreatedAtLocal, StringFormat='{}{0:HH:mm:ss}'}"
+                 Foreground="{StaticResource FlyoutTextSecondaryBrush}" FontSize="11" HorizontalAlignment="Right" />
+    </StackPanel>
+  </Border>
+
+</Window>

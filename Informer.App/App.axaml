@@ -1,0 +1,42 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Informer.App.App"
+             RequestedThemeVariant="Dark">
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+  </Application.Styles>
+
+  <Application.Resources>
+    <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="#1E1E1E" />
+    <SolidColorBrush x:Key="FlyoutSurfaceBrush" Color="#252528" />
+    <SolidColorBrush x:Key="FlyoutHeaderBrush" Color="#2B2B2F" />
+    <SolidColorBrush x:Key="FlyoutBorderBrush" Color="#3A3A3E" />
+    <SolidColorBrush x:Key="FlyoutAccentBrush" Color="#4FC3F7" />
+    <SolidColorBrush x:Key="FlyoutTextPrimaryBrush" Color="#F2F2F2" />
+    <SolidColorBrush x:Key="FlyoutTextSecondaryBrush" Color="#9A9AA0" />
+    <SolidColorBrush x:Key="FlyoutDangerBrush" Color="#F27272" />
+    <SolidColorBrush x:Key="FlyoutSuccessBrush" Color="#5FD68C" />
+    <SolidColorBrush x:Key="FlyoutWarningBrush" Color="#F2C94C" />
+    <CornerRadius x:Key="FlyoutCornerRadius">12</CornerRadius>
+  </Application.Resources>
+
+  <TrayIcon.Icons>
+    <TrayIcons>
+      <TrayIcon Icon="/Assets/tray-icon.ico"
+                ToolTipText="Информер"
+                IsVisible="True">
+        <TrayIcon.Menu>
+          <NativeMenu>
+            <NativeMenuItem Header="История уведомлений" Click="OnHistoryMenuClick" />
+            <NativeMenuItem Header="Настройки" Click="OnSettingsMenuClick" />
+            <NativeMenuItemSeparator />
+            <NativeMenuItem Header="Выход" Click="OnExitMenuClick" />
+          </NativeMenu>
+        </TrayIcon.Menu>
+      </TrayIcon>
+    </TrayIcons>
+  </TrayIcon.Icons>
+
+</Application>

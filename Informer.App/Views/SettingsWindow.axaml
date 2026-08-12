@@ -1,0 +1,159 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Informer.App.ViewModels"
+        x:Class="Informer.App.Views.SettingsWindow"
+        x:DataType="vm:SettingsWindowViewModel"
+        Title="Информер — Настройки"
+        Width="500" Height="620"
+        CanResize="False"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        WindowStartupLocation="Manual">
+
+  <Border Background="{StaticResource FlyoutSurfaceBrush}"
+          BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="1"
+          CornerRadius="{StaticResource FlyoutCornerRadius}" ClipToBounds="True">
+    <Grid RowDefinitions="Auto,*">
+
+      <Border Grid.Row="0" Background="{StaticResource FlyoutHeaderBrush}"
+              BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="0,0,0,1"
+              PointerPressed="OnHeaderPointerPressed">
+        <Grid ColumnDefinitions="*,Auto" Margin="16,10">
+          <TextBlock Grid.Column="0" Text="Настройки"
+                     Foreground="{StaticResource FlyoutTextPrimaryBrush}"
+                     FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Content="✕" Click="OnCloseClick"
+                  Background="Transparent" BorderThickness="0"
+                  Foreground="{StaticResource FlyoutTextSecondaryBrush}"
+                  Padding="8,2" FontSize="14" />
+        </Grid>
+      </Border>
+
+      <ScrollViewer Grid.Row="1" Margin="16">
+        <StackPanel Spacing="14">
+
+          <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Хранение истории" FontWeight="Bold"
+                         Foreground="{StaticResource FlyoutAccentBrush}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Удалять сообщения старше (дней):" VerticalAlignment="Center"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                <NumericUpDown x:Name="RetentionDaysInput" Value="{Binding RetentionDays}" FormatString="0" Minimum="1" Maximum="365" Width="110" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Безопасность" FontWeight="Bold"
+                         Foreground="{StaticResource FlyoutAccentBrush}" />
+              <CheckBox Content="Требовать API-ключ для приёма уведомлений"
+                         IsChecked="{Binding RequireApiKey}"
+                         Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+
+              <TextBlock Text="Ограничение частоты запросов (анти-спам):"
+                         Foreground="{StaticResource FlyoutTextSecondaryBrush}" Margin="0,4,0,0" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Максимум запросов:" VerticalAlignment="Center"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                <NumericUpDown x:Name="RateLimitMaxRequestsInput" Value="{Binding RateLimitMaxRequests}" FormatString="0" Minimum="1" Maximum="10000" Width="108" />
+                <TextBlock Text="за (сек):" VerticalAlignment="Center"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                <NumericUpDown x:Name="RateLimitWindowSecondsInput" Value="{Binding RateLimitWindowSeconds}" FormatString="0" Minimum="1" Maximum="3600" Width="108" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Уведомления" FontWeight="Bold"
+                         Foreground="{StaticResource FlyoutAccentBrush}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Время показа тоста (сек):" VerticalAlignment="Center"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                <NumericUpDown x:Name="ToastDisplaySecondsInput" Value="{Binding ToastDisplaySeconds}" FormatString="0" Minimum="1" Maximum="120" Width="100" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+           <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="14">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Политика отображения" FontWeight="Bold"
+                           Foreground="{StaticResource FlyoutAccentBrush}" />
+                <TextBlock Text="Какие типы сообщений показывать во всплывающих тостах (в истории видны всегда):"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" TextWrapping="Wrap" />
+
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Border Width="12" Height="12" CornerRadius="6" Background="{StaticResource FlyoutSuccessBrush}" />
+                  <CheckBox Content="Обычные сообщения" IsChecked="{Binding ShowInfoToasts}"
+                             Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Border Width="12" Height="12" CornerRadius="6" Background="{StaticResource FlyoutWarningBrush}" />
+                  <CheckBox Content="Предупреждения" IsChecked="{Binding ShowWarningToasts}"
+                             Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Border Width="12" Height="12" CornerRadius="6" Background="{StaticResource FlyoutDangerBrush}" />
+                  <CheckBox Content="Ошибки" IsChecked="{Binding ShowErrorToasts}"
+                             Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                </StackPanel>
+              </StackPanel>
+           </Border>
+          <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="10">
+              <TextBlock Text="API-ключи" FontWeight="Bold"
+                         Foreground="{StaticResource FlyoutAccentBrush}" />
+
+              <ListBox x:Name="ApiKeysList" ItemsSource="{Binding ApiKeys}" MinHeight="0" MaxHeight="160"
+                       Background="Transparent"
+                       SelectionMode="Single" PointerPressed="OnApiKeysPointerPressed">
+                <ListBox.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem Header="Копировать ключ" Click="OnCopyKeyClick" />
+                    <MenuItem Header="Удалить" Click="OnDeleteKeyClick" />
+                  </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:CompileBindings="False">
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                      <StackPanel Grid.Column="0">
+                        <TextBlock Text="{Binding Label}" FontWeight="Bold"
+                                   Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                        <TextBlock Text="{Binding Key}" FontSize="11"
+                                   Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="1" Text="активен" Foreground="{StaticResource FlyoutSuccessBrush}"
+                                 IsVisible="{Binding IsActive}" VerticalAlignment="Center" Margin="4,0" />
+                      <TextBlock Grid.Column="1" Text="отозван" Foreground="{StaticResource FlyoutDangerBrush}"
+                                 IsVisible="{Binding !IsActive}" VerticalAlignment="Center" Margin="4,0" />
+                      <Button Grid.Column="2" Content="Отозвать" IsEnabled="{Binding IsActive}"
+                              Command="{Binding $parent[ListBox].DataContext.RevokeApiKeyCommand}"
+                              CommandParameter="{Binding}" />
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBox FontSize="13" Watermark="Название ключа (например, 1С Основная база)"
+                          Text="{Binding NewKeyLabel}" Width="320" />
+                <Button Content="Добавить ключ" Command="{Binding AddApiKeyCommand}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <Button Content="Сохранить" HorizontalAlignment="Right" Command="{Binding SaveCommand}" />
+          <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource FlyoutDangerBrush}"
+                     HorizontalAlignment="Right" IsVisible="{Binding IsStatusError}" />
+          <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource FlyoutSuccessBrush}"
+                     HorizontalAlignment="Right" IsVisible="{Binding !IsStatusError}" />
+
+        </StackPanel>
+      </ScrollViewer>
+
+    </Grid>
+  </Border>
+
+</Window>

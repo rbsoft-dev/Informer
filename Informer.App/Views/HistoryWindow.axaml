@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Informer.App.ViewModels"
+        xmlns:dto="using:Informer.Core.Dto"
+        x:Class="Informer.App.Views.HistoryWindow"
+        x:DataType="vm:HistoryWindowViewModel"
+        Title="Информер — История уведомлений"
+        Width="760" Height="480"
+        MinWidth="480" MinHeight="320"
+        CanResize="True"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        WindowStartupLocation="Manual">
+
+  <Border Background="{StaticResource FlyoutSurfaceBrush}"
+          BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="1"
+          CornerRadius="{StaticResource FlyoutCornerRadius}" ClipToBounds="True">
+    <Grid RowDefinitions="Auto,Auto,*">
+
+      <Border Grid.Row="0" Background="{StaticResource FlyoutHeaderBrush}"
+              BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="0,0,0,1"
+              PointerPressed="OnHeaderPointerPressed">
+        <Grid ColumnDefinitions="*,Auto,Auto" Margin="16,10">
+          <TextBlock Grid.Column="0" Text="История уведомлений"
+                     Foreground="{StaticResource FlyoutTextPrimaryBrush}"
+                     FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
+          <Button x:Name="MaximizeButton" Grid.Column="1" Content="🗖" Click="OnMaximizeClick"
+                  Background="Transparent" BorderThickness="0"
+                  Foreground="{StaticResource FlyoutTextSecondaryBrush}"
+                  Padding="8,2" FontSize="14" Margin="0,0,4,0" />
+          <Button Grid.Column="2" Content="✕" Click="OnCloseClick"
+                  Background="Transparent" BorderThickness="0"
+                  Foreground="{StaticResource FlyoutTextSecondaryBrush}"
+                  Padding="8,2" FontSize="14" />
+        </Grid>
+      </Border>
+
+      <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="16,12,16,8">
+        <TextBlock Grid.Column="0" Text="Отправитель:" VerticalAlignment="Center" Margin="0,0,8,0"
+                   Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+        <ComboBox Grid.Column="1" ItemsSource="{Binding Senders}"
+                  SelectedItem="{Binding SelectedSender}" HorizontalAlignment="Stretch" />
+        <Button Grid.Column="2" Content="Обновить" Margin="8,0,0,0"
+                Command="{Binding RefreshCommand}" />
+      </Grid>
+
+      <DataGrid x:Name="HistoryGrid" Grid.Row="2" Margin="16,0,16,16"
+                ItemsSource="{Binding Notifications}" Background="Transparent"
+                Foreground="{StaticResource FlyoutTextPrimaryBrush}"
+                IsReadOnly="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal"
+                CanUserResizeColumns="True" SelectionMode="Single"
+                PointerPressed="OnGridPointerPressed">
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="Копировать текст" Click="OnCopyClick" />
+            <MenuItem Header="Удалить" Click="OnDeleteClick" />
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Время" Binding="{Binding CreatedAtLocal, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}" Width="150" IsReadOnly="True" />
+          <DataGridTextColumn Header="Отправитель" Binding="{Binding Sender}" Width="150" IsReadOnly="True" />
+          <DataGridTemplateColumn Header="Тип" Width="120">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:CompileBindings="False">
+                <TextBlock Text="{Binding SeverityLabel}" Foreground="{Binding SeverityBrush}"
+                           VerticalAlignment="Center" Margin="8,0" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*" IsReadOnly="True" />
+          <DataGridCheckBoxColumn Header="Прочитано" Binding="{Binding IsRead}" Width="90" IsReadOnly="False" />
+        </DataGrid.Columns>
+      </DataGrid>
+
+    </Grid>
+  </Border>
+
+</Window>
