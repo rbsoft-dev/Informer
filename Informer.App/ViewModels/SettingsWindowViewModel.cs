@@ -41,6 +41,8 @@ public partial class SettingsWindowViewModel : ObservableObject
     [ObservableProperty]
     private int? _rateLimitWindowSeconds = 10;
 
+    [ObservableProperty]
+    private int? _listenPort = 4399;
     public ObservableCollection<string> LanguageOptions { get; } = new() { "Русский", "English" };
 
     [ObservableProperty]
@@ -80,6 +82,7 @@ public partial class SettingsWindowViewModel : ObservableObject
             ShowErrorToasts = settings.ShowErrorToasts;
             RateLimitMaxRequests = settings.RateLimitMaxRequests;
             RateLimitWindowSeconds = settings.RateLimitWindowSeconds;
+            ListenPort = settings.ListenPort;
 
             _isLoadingLanguage = true;
             SelectedLanguageDisplay = settings.Language == "en" ? "English" : "Русский";
@@ -155,6 +158,20 @@ public partial class SettingsWindowViewModel : ObservableObject
             return;
         }
 
+        if (ListenPort is null)
+        {
+            StatusMessage = LocalizationManager.Get("ErrPortRequired");
+            IsStatusError = true;
+            return;
+        }
+
+        if (ListenPort is < 1 or > 65535)
+        {
+            StatusMessage = LocalizationManager.Get("ErrPortRange");
+            IsStatusError = true;
+            return;
+        }
+
         using var scope = _scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
 
@@ -165,6 +182,7 @@ public partial class SettingsWindowViewModel : ObservableObject
             IsStatusError = true;
             return;
         }
+        var portChanged = settings.ListenPort != ListenPort.Value;
 
         settings.RetentionDays = RetentionDays.Value;
         settings.RequireApiKey = RequireApiKey;
@@ -174,9 +192,12 @@ public partial class SettingsWindowViewModel : ObservableObject
         settings.ShowErrorToasts = ShowErrorToasts;
         settings.RateLimitMaxRequests = RateLimitMaxRequests.Value;
         settings.RateLimitWindowSeconds = RateLimitWindowSeconds.Value;
+        settings.ListenPort = ListenPort.Value;
 
         await db.SaveChangesAsync();
-        StatusMessage = LocalizationManager.Get("MsgSaved");
+        StatusMessage = portChanged
+            ? LocalizationManager.Get("MsgSavedPortRestart")
+            : LocalizationManager.Get("MsgSaved");
         IsStatusError = false;
     }
 

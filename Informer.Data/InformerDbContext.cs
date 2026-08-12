@@ -49,7 +49,7 @@ public class InformerDbContext : DbContext
                 ShowErrorToasts = true,
                 RateLimitMaxRequests = 20,
                 RateLimitWindowSeconds = 10,
-                ListenPort = 5005,
+                ListenPort = 4399,
                 Language = ""
             });
         });

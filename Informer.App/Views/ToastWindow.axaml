@@ -4,6 +4,7 @@
         x:Class="Informer.App.Views.ToastWindow"
         x:DataType="vm:ToastQueueViewModel"
         Title="Информер"
+        Icon="/Assets/tray-icon.ico"
         Width="340" MinHeight="110" SizeToContent="Height"
         CanResize="False"
         SystemDecorations="None"

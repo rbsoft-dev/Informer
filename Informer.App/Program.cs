@@ -29,32 +29,27 @@ public static class Program
     {
         InstallCrashLogging();
 
-        // TEMPORARY DIAGNOSTIC: measures each startup phase and prints to the Debug
-        // output window (View -> Output -> Show output from: Debug in Visual Studio)
-        // so we can see exactly where the 15-second startup delay is coming from.
-        // Safe to remove once the slow phase is identified and fixed.
         var totalStopwatch = Stopwatch.StartNew();
         var phaseStopwatch = Stopwatch.StartNew();
 
-        var webApp = BuildWebHost(args);
+        var earlyConfig = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: true)
+            .Build();
+
+        var connectionString = ResolveConnectionString(
+            earlyConfig.GetConnectionString("Default") ?? "Data Source=informer.db");
+        var port = MigrateAndResolvePort(connectionString, earlyConfig);
+        Debug.WriteLine($"[STARTUP] Early migrate + port resolve: {phaseStopwatch.ElapsedMilliseconds} ms");
+        phaseStopwatch.Restart();
+
+        var webApp = BuildWebHost(args, connectionString, port, earlyConfig);
         Debug.WriteLine($"[STARTUP] BuildWebHost: {phaseStopwatch.ElapsedMilliseconds} ms");
         phaseStopwatch.Restart();
 
         _webApp = webApp;
         Services = webApp.Services;
 
-        // Apply pending EF Core migrations / create the SQLite file on first run.
-        using (var scope = webApp.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
-            db.Database.Migrate();
-        }
-        Debug.WriteLine($"[STARTUP] Database.Migrate: {phaseStopwatch.ElapsedMilliseconds} ms");
-        phaseStopwatch.Restart();
-
-        // Kestrel runs on its own async machinery in the background; it does not need
-        // to own the thread that calls it, so we fire it and immediately move on to
-        // start the Avalonia UI loop on this (the process main) thread.
         var kestrelTask = webApp.RunAsync();
         Debug.WriteLine($"[STARTUP] webApp.RunAsync (fire-and-forget call itself): {phaseStopwatch.ElapsedMilliseconds} ms");
         phaseStopwatch.Restart();
@@ -67,27 +62,36 @@ public static class Program
 
         try
         {
-            // Everything up to here should be fast. If the delay is actually INSIDE
-            // StartWithClassicDesktopLifetime (Avalonia's own platform/tray init), the
-            // "TOTAL before" line above will be small and the real 15s gap will be
-            // between that line and the tray icon actually appearing on screen.
             avaloniaApp.StartWithClassicDesktopLifetime(args);
         }
         finally
         {
-            // UI loop exited (tray "Exit" clicked) -> shut Kestrel down gracefully too.
             webApp.StopAsync().GetAwaiter().GetResult();
             kestrelTask.GetAwaiter().GetResult();
         }
 
-        // Safety net: StartWithClassicDesktopLifetime() returning is SUPPOSED to mean the
-        // whole process is done and .NET should exit naturally once every thread finishes.
-        // In practice, tray apps can leave a background thread alive (a stray
-        // DispatcherTimer, the native tray-icon handle, an ASP.NET Core internal worker
-        // that didn't unwind in time) which silently keeps the process listed in Task
-        // Manager forever, even though the window/tray icon are gone. Explicitly forcing
-        // termination here guarantees the process always fully disappears on exit.
         Environment.Exit(0);
+    }
+    private static int MigrateAndResolvePort(string connectionString, IConfiguration earlyConfig)
+    {
+        var fallbackPort = earlyConfig.GetValue<int?>("Kestrel:DefaultPort") ?? 4399;
+
+        try
+        {
+            var options = new DbContextOptionsBuilder<InformerDbContext>()
+                .UseSqlite(connectionString)
+                .Options;
+
+            using var db = new InformerDbContext(options);
+            db.Database.Migrate();
+
+            var settings = db.AppSettings.AsNoTracking().FirstOrDefault();
+            return settings is { ListenPort: > 0 } ? settings.ListenPort : fallbackPort;
+        }
+        catch
+        {
+            return fallbackPort;
+        }
     }
 
     /// <summary>
@@ -152,7 +156,7 @@ public static class Program
         return $"{prefix}{absolutePath}";
     }
 
-    private static WebApplication BuildWebHost(string[] args)
+    private static WebApplication BuildWebHost(string[] args, string connectionString, int port, IConfiguration earlyConfig)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -160,15 +164,8 @@ public static class Program
             ContentRootPath = AppContext.BaseDirectory
         });
 
-        var configuration = builder.Configuration;
-        var configuredConnectionString = configuration.GetConnectionString("Default") ?? "Data Source=informer.db";
-        var connectionString = ResolveConnectionString(configuredConnectionString);
-        var port = configuration.GetValue<int?>("Kestrel:DefaultPort") ?? 5005;
-
-        // Bind to loopback only by default — this is a local notification receiver, not
-        // a public API. Change to 0.0.0.0 in appsettings.json only if senders live on
-        // other machines on the LAN, and rely on the API-key + rate-limit middleware.
-        builder.WebHost.UseUrls($"http://127.0.0.1:{port}");
+        var bindAddress = earlyConfig.GetValue<string>("Kestrel:BindAddress") ?? "0.0.0.0";
+        builder.WebHost.UseUrls($"http://{bindAddress}:{port}");
 
         builder.Services.AddDbContext<InformerDbContext>(options =>
             options.UseSqlite(connectionString));

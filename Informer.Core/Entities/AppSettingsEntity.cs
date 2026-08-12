@@ -23,7 +23,7 @@ public class AppSettingsEntity
     public int RateLimitWindowSeconds { get; set; } = 10;
 
     /// <summary>TCP port Kestrel listens on for the notify API.</summary>
-    public int ListenPort { get; set; } = 5005;
+    public int ListenPort { get; set; } = 4399;
     public bool ShowInfoToasts { get; set; } = true;
     public bool ShowWarningToasts { get; set; } = true;
     public bool ShowErrorToasts { get; set; } = true;

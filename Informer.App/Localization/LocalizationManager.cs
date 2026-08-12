@@ -72,6 +72,9 @@ public static class LocalizationManager
         dict["RateLimitDescription"] = "Ограничение частоты запросов (анти-спам):";
         dict["RateLimitMaxLabel"] = "Максимум запросов:";
         dict["RateLimitWindowLabel"] = "за (сек):";
+        dict["SectionServerPort"] = "Порт сервера";
+        dict["ServerPortLabel"] = "Порт:";
+        dict["ServerPortHint"] = "Изменение вступит в силу после перезапуска приложения.";
         dict["SectionNotifications"] = "Уведомления";
         dict["ToastDurationLabel"] = "Время показа тоста (сек):";
         dict["SectionDisplayPolicy"] = "Политика отображения";
@@ -96,8 +99,11 @@ public static class LocalizationManager
         dict["ErrToastSecondsRequired"] = "Обязательно введите время показа тоста.";
         dict["ErrRateMaxRequired"] = "Обязательно введите максимум запросов для анти-спама.";
         dict["ErrRateWindowRequired"] = "Обязательно введите окно времени (сек) для анти-спама.";
+        dict["ErrPortRequired"] = "Обязательно введите порт сервера.";
+        dict["ErrPortRange"] = "Порт должен быть в диапазоне от 1 до 65535.";
         dict["ErrSettingsEmpty"] = "Ошибка: таблица настроек пуста.";
         dict["MsgSaved"] = "Настройки сохранены.";
+        dict["MsgSavedPortRestart"] = "Настройки сохранены. Новый порт вступит в силу после перезапуска приложения.";
         dict["NewMessagesTooltip"] = "Новые сообщения";
 
         return dict;
@@ -135,6 +141,9 @@ public static class LocalizationManager
         dict["RateLimitDescription"] = "Request rate limit (anti-spam):";
         dict["RateLimitMaxLabel"] = "Max requests:";
         dict["RateLimitWindowLabel"] = "per (sec):";
+        dict["SectionServerPort"] = "Server port";
+        dict["ServerPortLabel"] = "Port:";
+        dict["ServerPortHint"] = "Changing this takes effect after restarting the application.";
         dict["SectionNotifications"] = "Notifications";
         dict["ToastDurationLabel"] = "Toast display duration (sec):";
         dict["SectionDisplayPolicy"] = "Display policy";
@@ -159,8 +168,11 @@ public static class LocalizationManager
         dict["ErrToastSecondsRequired"] = "Please enter the toast display duration.";
         dict["ErrRateMaxRequired"] = "Please enter the max requests for anti-spam.";
         dict["ErrRateWindowRequired"] = "Please enter the anti-spam time window (sec).";
+        dict["ErrPortRequired"] = "Please enter the server port.";
+        dict["ErrPortRange"] = "Port must be between 1 and 65535.";
         dict["ErrSettingsEmpty"] = "Error: settings table is empty.";
         dict["MsgSaved"] = "Settings saved.";
+        dict["MsgSavedPortRestart"] = "Settings saved. The new port takes effect after restarting the application.";
         dict["NewMessagesTooltip"] = "New messages";
 
         return dict;

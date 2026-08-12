@@ -30,7 +30,7 @@ public partial class SettingsWindow : Window
         if (screen is null) return;
 
         Position = ScreenPositioning.BottomRight(screen, Width, Height, ScreenMargin);
-        foreach (var numeric in new[] { RetentionDaysInput, RateLimitMaxRequestsInput, RateLimitWindowSecondsInput, ToastDisplaySecondsInput })
+        foreach (var numeric in new[] { RetentionDaysInput, RateLimitMaxRequestsInput, RateLimitWindowSecondsInput, ToastDisplaySecondsInput, ListenPortInput })
         {
             numeric.AddHandler(InputElement.TextInputEvent, OnDigitsOnlyTextInput, RoutingStrategies.Tunnel);
         }

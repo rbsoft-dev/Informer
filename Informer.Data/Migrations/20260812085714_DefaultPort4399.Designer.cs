@@ -3,6 +3,7 @@ using System;
 using Informer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Informer.Data.Migrations
 {
     [DbContext(typeof(InformerDbContext))]
-    partial class InformerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260812085714_DefaultPort4399")]
+    partial class DefaultPort4399
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.25");

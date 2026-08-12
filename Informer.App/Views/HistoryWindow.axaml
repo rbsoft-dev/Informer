@@ -5,6 +5,7 @@
         x:Class="Informer.App.Views.HistoryWindow"
         x:DataType="vm:HistoryWindowViewModel"
         Title="Информер — История уведомлений"
+        Icon="/Assets/tray-icon.ico"
         Width="760" Height="480"
         MinWidth="480" MinHeight="320"
         CanResize="True"
