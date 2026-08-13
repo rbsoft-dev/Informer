@@ -109,4 +109,14 @@ public partial class HistoryWindow : Window
             await vm.DeleteNotificationAsync(row);
         }
     }
+    private void OnResizeGripPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control
+           && control.Tag is string tag
+           && Enum.TryParse<WindowEdge>(tag, out var edge)
+           && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            BeginResizeDrag(edge, e);
+        }
+    }
 }

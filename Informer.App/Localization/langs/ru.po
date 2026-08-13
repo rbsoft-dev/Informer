@@ -1,0 +1,226 @@
+msgid ""
+msgstr ""
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Трей
+msgid "TrayHistory"
+msgstr "История уведомлений"
+
+msgid "TraySettings"
+msgstr "Настройки"
+
+msgid "TrayExit"
+msgstr "Выход"
+
+# Окно истории
+msgid "HistoryTitle"
+msgstr "История уведомлений"
+
+msgid "HistorySenderLabel"
+msgstr "Отправитель:"
+
+msgid "HistoryRefreshButton"
+msgstr "Обновить"
+
+msgid "ColHistoryTime"
+msgstr "Время"
+
+msgid "ColHistorySender"
+msgstr "Отправитель"
+
+msgid "ColHistoryType"
+msgstr "Тип"
+
+msgid "ColHistoryDescription"
+msgstr "Описание"
+
+msgid "ColHistoryRead"
+msgstr "Прочитано"
+
+msgid "CtxCopyText"
+msgstr "Копировать текст"
+
+msgid "CtxDelete"
+msgstr "Удалить"
+
+msgid "AllSendersOption"
+msgstr "Все отправители"
+
+# Важность
+msgid "SeverityError"
+msgstr "Ошибка"
+
+msgid "SeverityWarning"
+msgstr "Предупреждение"
+
+msgid "SeverityInfo"
+msgstr "Сообщение"
+
+# Окно настроек
+msgid "SettingsTitle"
+msgstr "Настройки"
+
+msgid "TrayAbout"
+msgstr "О нас"
+
+msgid "AppNameLabel"
+msgstr "Информер"
+
+msgid "AboutAuthorName"
+msgstr "Евгений Ершов / RBSoft"
+
+msgid "SectionRetention"
+msgstr "Хранение истории"
+
+msgid "RetentionLabel"
+msgstr "Удалять сообщения старше (дней):"
+
+msgid "SectionSecurity"
+msgstr "Безопасность"
+
+msgid "RequireApiKeyCheckbox"
+msgstr "Требовать API-ключ для приёма уведомлений"
+
+msgid "RateLimitDescription"
+msgstr "Ограничение частоты запросов (анти-спам):"
+
+msgid "RateLimitMaxLabel"
+msgstr "Максимум запросов:"
+
+msgid "RateLimitWindowLabel"
+msgstr "за (сек):"
+
+msgid "SectionServerPort"
+msgstr "Порт сервера"
+
+msgid "ServerPortLabel"
+msgstr "Порт:"
+
+msgid "ServerPortHint"
+msgstr "Изменение вступит в силу после перезапуска приложения."
+
+msgid "SectionNotifications"
+msgstr "Уведомления"
+
+msgid "ToastDurationLabel"
+msgstr "Время показа тоста (сек):"
+
+msgid "SectionDisplayPolicy"
+msgstr "Политика отображения"
+
+msgid "DisplayPolicyDescription"
+msgstr "Какие типы сообщений показывать во всплывающих тостах (в истории видны всегда):"
+
+msgid "ShowInfoCheckbox"
+msgstr "Обычные сообщения"
+
+msgid "ShowWarningCheckbox"
+msgstr "Предупреждения"
+
+msgid "ShowErrorCheckbox"
+msgstr "Ошибки"
+
+msgid "SectionLanguage"
+msgstr "Язык интерфейса"
+
+msgid "LanguageLabel"
+msgstr "Язык:"
+
+msgid "SectionApiKeys"
+msgstr "API-ключи"
+
+msgid "ApiKeyActive"
+msgstr "активен"
+
+msgid "ApiKeyRevoked"
+msgstr "отозван"
+
+msgid "RevokeButton"
+msgstr "Отозвать"
+
+msgid "NewKeyWatermark"
+msgstr "Название ключа (например, 1С Основная база)"
+
+msgid "AddKeyButton"
+msgstr "Добавить ключ"
+
+msgid "CtxCopyKey"
+msgstr "Копировать ключ"
+
+msgid "CtxDeleteKey"
+msgstr "Удалить"
+
+msgid "SaveButton"
+msgstr "Сохранить"
+
+# Статусные сообщения настроек
+msgid "ErrRetentionRequired"
+msgstr "Обязательно введите количество дней хранения истории."
+
+msgid "ErrRetentionMin"
+msgstr "Количество дней хранения должно быть не меньше 1."
+
+msgid "ErrToastSecondsRequired"
+msgstr "Обязательно введите время показа тоста."
+
+msgid "ErrRateMaxRequired"
+msgstr "Обязательно введите максимум запросов для анти-спама."
+
+msgid "ErrRateWindowRequired"
+msgstr "Обязательно введите окно времени (сек) для анти-спама."
+
+msgid "ErrPortRequired"
+msgstr "Обязательно введите порт сервера."
+
+msgid "ErrPortRange"
+msgstr "Порт должен быть в диапазоне от 1 до 65535."
+
+msgid "ErrSettingsEmpty"
+msgstr "Ошибка: таблица настроек пуста."
+
+msgid "MsgSaved"
+msgstr "Настройки сохранены."
+
+msgid "MsgSavedPortRestart"
+msgstr "Настройки сохранены. Новый порт вступит в силу после перезапуска приложения."
+
+# "Лампочка" новых сообщений (тост + история)
+msgid "NewMessagesTooltip"
+msgstr "Новые сообщения"
+
+msgid "ShowFullMessage"
+msgstr "Показать полностью"
+
+# Окно "О нас"
+msgid "AboutTitle"
+msgstr "О нас"
+
+msgid "AboutVersionLabel"
+msgstr "Версия"
+
+msgid "AboutAuthorLabel"
+msgstr "Разработчик"
+
+msgid "AboutLicenseText"
+msgstr "Распространяется бесплатно по лицензии MIT — свободно используйте, изменяйте и встраивайте в свои проекты."
+
+msgid "AboutUsageSectionTitle"
+msgstr "Как пользоваться"
+
+msgid "AboutUsageText"
+msgstr "Информер живёт в системном трее — правый клик по иконке открывает меню: История уведомлений, Настройки, О нас, Выход.\n\nНовые уведомления показываются всплывающим тостом в правом нижнем углу экрана. Если пришло несколько сообщений подряд, стрелки ◀ ▶ позволяют листать их без открытия истории, а колокольчик 🔔 сразу переносит к последнему новому. Если текст не поместился — кнопка «Показать полностью» разворачивает тост целиком.\n\nОкно «История уведомлений» хранит полный список всех сообщений с фильтром по отправителю и возможностью пометить прочитанным вручную.\n\nВ «Настройках» можно поменять язык интерфейса, срок хранения истории, порт сервера, требование API-ключа, лимит запросов в анти-спам защите и то, какие типы сообщений показывать всплывающими тостами."
+
+msgid "AboutIntegrationSectionTitle"
+msgstr "Интеграция"
+
+msgid "AboutIntegrationIntro"
+msgstr "Информер принимает уведомления по обычному HTTP POST-запросу с JSON в теле — подходит любая система, способная отправить такой запрос (1С, скрипты, сторонние сервисы)."
+
+msgid "AboutIntegrationEndpointsTitle"
+msgstr "Доступные эндпоинты:"
+
+msgid "AboutIntegrationNote"
+msgstr "Поле «type» необязательно (info/warning/error, по умолчанию info) — влияет только на цвет рамки тоста. Заголовок X-Api-Key обязателен, только если в Настройках включено «Требовать API-ключ»."

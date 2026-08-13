@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Informer.App.Localization;
 using Informer.App.Services;
 using Informer.App.Utilities;
 using Informer.App.ViewModels;
@@ -15,6 +14,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Informer.App.Localization;
 
 namespace Informer.App;
 
@@ -36,8 +36,10 @@ public partial class App : Application
 
     private NativeMenuItem? _historyMenuItem;
     private NativeMenuItem? _settingsMenuItem;
+    private NativeMenuItem? _aboutMenuItem;
     private NativeMenuItem? _exitMenuItem;
     private TrayIcon? _trayIcon;
+    private AboutWindow? _aboutWindow;
 
     public override void OnFrameworkInitializationCompleted()
     {
@@ -74,12 +76,15 @@ public partial class App : Application
 
         _historyMenuItem = menu.Items.ElementAtOrDefault(0) as NativeMenuItem;
         _settingsMenuItem = menu.Items.ElementAtOrDefault(1) as NativeMenuItem;
-        _exitMenuItem = menu.Items.ElementAtOrDefault(3) as NativeMenuItem;
+        _aboutMenuItem = menu.Items.ElementAtOrDefault(2) as NativeMenuItem;
+        _exitMenuItem = menu.Items.ElementAtOrDefault(4) as NativeMenuItem;
     }
 
     private static void ApplyStartupLanguage()
     {
-        var language = AppLanguage.Russian;
+        LocalizationManager.RescanAvailableLanguages();
+
+        var language = "ru";
         try
         {
             using var scope = Program.Services.CreateScope();
@@ -95,12 +100,12 @@ public partial class App : Application
             if (string.IsNullOrEmpty(settings.Language))
             {
                 language = DetectSystemLanguage();
-                settings.Language = language == AppLanguage.English ? "en" : "ru";
+                settings.Language = language;
                 db.SaveChanges();
             }
             else
             {
-                language = settings.Language == "en" ? AppLanguage.English : AppLanguage.Russian;
+                language = settings.Language;
             }
         }
         catch
@@ -110,18 +115,19 @@ public partial class App : Application
         LocalizationManager.Apply(language);
     }
 
-    private static AppLanguage DetectSystemLanguage()
+    private static string DetectSystemLanguage()
     {
-        var twoLetterCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-        return twoLetterCode.Equals("ru", StringComparison.OrdinalIgnoreCase)
-            ? AppLanguage.Russian
-            : AppLanguage.English;
+        var twoLetterCode = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+
+        var match = LocalizationManager.AvailableLanguages.FirstOrDefault(l => l.Code == twoLetterCode);
+        return match?.Code ?? LocalizationManager.AvailableLanguages.FirstOrDefault()?.Code ?? "ru";
     }
 
-    private void UpdateTrayMenuText(AppLanguage language)
+    private void UpdateTrayMenuText(string language)
     {
         UpdateHistoryMenuItemHeader();
         if (_settingsMenuItem is not null) _settingsMenuItem.Header = LocalizationManager.Get("TraySettings");
+        if (_aboutMenuItem is not null) _aboutMenuItem.Header = LocalizationManager.Get("TrayAbout"); 
         if (_exitMenuItem is not null) _exitMenuItem.Header = LocalizationManager.Get("TrayExit");
     }
 
@@ -301,6 +307,31 @@ public partial class App : Application
             else
             {
                 _settingsWindow.Activate();
+            }
+        });
+    }
+    private void OnAboutMenuClick(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            try
+            {
+                if (_aboutWindow is null || !_aboutWindow.IsVisible)
+                {
+                    _aboutWindow = new AboutWindow
+                    {
+                        DataContext = new AboutWindowViewModel()
+                    };
+                    _aboutWindow.Show();
+                }
+                else
+                {
+                    _aboutWindow.Activate();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogToastFailure(ex);
             }
         });
     }

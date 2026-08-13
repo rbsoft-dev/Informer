@@ -1,13 +1,13 @@
 ﻿using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Informer.App.Localization;
 using Informer.Core.Entities;
 using Informer.Core.Services;
 using Informer.Data;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Informer.App.Localization;
 
 namespace Informer.App.ViewModels;
 
@@ -19,10 +19,20 @@ public partial class ToastQueueViewModel : ObservableObject
     private int _currentIndex = -1;
 
     [ObservableProperty] private string _sender = string.Empty;
-    [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private DateTime _createdAtLocal;
     [ObservableProperty] private IBrush _borderColor = Brushes.Gray;
     [ObservableProperty] private string _positionLabel = string.Empty;
+
+    [NotifyPropertyChangedFor(nameof(DescriptionMaxLines))]
+    [NotifyPropertyChangedFor(nameof(HasMoreText))]
+    [ObservableProperty] private bool _isExpanded;
+
+    [NotifyPropertyChangedFor(nameof(HasMoreText))]
+    [ObservableProperty] private string _description = string.Empty;
+
+    public int DescriptionMaxLines => IsExpanded ? 1000 : 4;
+
+    public bool HasMoreText => !IsExpanded && Description.Length > 200;
 
     [NotifyPropertyChangedFor(nameof(NewMessagesTooltip))]
     [ObservableProperty] private bool _hasNewMessages;
@@ -91,6 +101,12 @@ public partial class ToastQueueViewModel : ObservableObject
         RefreshDisplayed();
     }
 
+    [RelayCommand]
+    private void ToggleExpand()
+    {
+        IsExpanded = !IsExpanded;
+    }
+
     private void UpdateNewMessagesBadge()
     {
         NewMessagesCount = Math.Max(0, _items.Count - 1 - _currentIndex);
@@ -110,6 +126,7 @@ public partial class ToastQueueViewModel : ObservableObject
         CreatedAtLocal = current.CreatedAtLocal;
         BorderColor = current.BorderColor;
         PositionLabel = $"{_currentIndex + 1} из {_items.Count}";
+        IsExpanded = false;
 
         NextCommand.NotifyCanExecuteChanged();
         PreviousCommand.NotifyCanExecuteChanged();

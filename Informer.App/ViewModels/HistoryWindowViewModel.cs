@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Informer.App.Localization;
 using Informer.Core.Dto;
 using Informer.Core.Entities;
 using Informer.Core.Services;
 using Informer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Informer.App.Localization;
 
 namespace Informer.App.ViewModels;
 
@@ -77,7 +77,7 @@ public partial class HistoryWindowViewModel : ObservableObject
         NewMessagesCount = 0;
     }
 
-    private void OnLanguageChanged(AppLanguage language)
+    private void OnLanguageChanged(string language)
     {
         var wasShowingAll = SelectedSender == AllSendersLabel || Senders.Count == 0 || SelectedSender == Senders.FirstOrDefault();
         Dispatcher.UIThread.Post(() =>

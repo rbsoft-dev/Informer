@@ -44,7 +44,13 @@
         </Grid>
 
       <TextBlock Text="{Binding Description}" Foreground="{StaticResource FlyoutTextPrimaryBrush}" TextWrapping="Wrap"
-                 MaxLines="4" TextTrimming="CharacterEllipsis" />
+           MaxLines="{Binding DescriptionMaxLines}" TextTrimming="CharacterEllipsis" />
+
+        <Button Content="{DynamicResource ShowFullMessage}" Command="{Binding ToggleExpandCommand}"
+                IsVisible="{Binding HasMoreText}"
+                Background="Transparent" BorderThickness="0" Padding="0"
+                FontSize="11" Foreground="{StaticResource FlyoutAccentBrush}"
+                HorizontalAlignment="Left" HorizontalContentAlignment="Left" />
 
       <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,2,0,0" VerticalAlignment="Center">
           <Button Grid.Column="0" Content="‹" Command="{Binding PreviousCommand}"

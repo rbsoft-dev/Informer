@@ -1,0 +1,139 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Informer.App.ViewModels"
+        x:Class="Informer.App.Views.AboutWindow"
+        x:DataType="vm:AboutWindowViewModel"
+        Title="Информер — О нас"
+        Icon="/Assets/tray-icon.ico"
+        Width="560" Height="640"
+        MinWidth="420" MinHeight="360"
+        CanResize="True"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        WindowStartupLocation="Manual">
+
+  <Grid>
+    <Border Background="{StaticResource FlyoutSurfaceBrush}"
+            BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="1"
+            CornerRadius="{StaticResource FlyoutCornerRadius}" ClipToBounds="True">
+      <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" Background="{StaticResource FlyoutHeaderBrush}"
+                BorderBrush="{StaticResource FlyoutBorderBrush}" BorderThickness="0,0,0,1"
+                PointerPressed="OnHeaderPointerPressed">
+          <Grid ColumnDefinitions="*,Auto" Margin="16,10">
+            <TextBlock Grid.Column="0" Text="{DynamicResource AboutTitle}"
+                       Foreground="{StaticResource FlyoutTextPrimaryBrush}"
+                       FontWeight="Bold" FontSize="14" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="✕" Click="OnCloseClick"
+                    Background="Transparent" BorderThickness="0"
+                    Foreground="{StaticResource FlyoutTextSecondaryBrush}"
+                    Padding="8,2" FontSize="14" />
+          </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Margin="16,16,16,4">
+          <StackPanel Spacing="14">
+
+            
+            <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="16">
+              <StackPanel Spacing="10">
+                <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                  <Image Source="/Assets/tray-icon.ico" Width="48" Height="48" />
+                  <StackPanel VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="{DynamicResource AppNameLabel}" FontWeight="Bold" FontSize="18"
+                               Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                    <TextBlock Foreground="{StaticResource FlyoutTextSecondaryBrush}" FontSize="12">
+                      <Run Text="{DynamicResource AboutVersionLabel}" /><Run Text=" " /><Run Text="{Binding Version}" />
+                    </TextBlock>
+                  </StackPanel>
+                </StackPanel>
+
+                <Border Height="1" Background="{StaticResource FlyoutBorderBrush}" Margin="0,4" />
+
+                <StackPanel Spacing="4">
+                  <TextBlock Text="{DynamicResource AboutAuthorLabel}" FontSize="11"
+                             Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
+                  <TextBlock Text="{DynamicResource AboutAuthorName}" FontWeight="Bold"
+                             Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <TextBlock Foreground="{StaticResource FlyoutAccentBrush}" Cursor="Hand"
+                             PointerPressed="OnEmailClick" Text="online@rbsoft.ru" />
+                  <TextBlock Foreground="{StaticResource FlyoutAccentBrush}" Cursor="Hand"
+                             PointerPressed="OnTelegramClick" Text="Telegram: @rbsoft_official" />
+                  <TextBlock Foreground="{StaticResource FlyoutAccentBrush}" Cursor="Hand"
+                             PointerPressed="OnBrowserClick" Text="RBSoft.ru" />
+                </StackPanel>
+
+                <TextBlock Text="{DynamicResource AboutLicenseText}" FontSize="11" TextWrapping="Wrap"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" Margin="0,4,0,0" />
+              </StackPanel>
+            </Border>
+
+            
+            <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="16">
+              <StackPanel Spacing="8">
+                <TextBlock Text="{DynamicResource AboutUsageSectionTitle}" FontWeight="Bold"
+                           Foreground="{StaticResource FlyoutAccentBrush}" />
+                <TextBlock Text="{DynamicResource AboutUsageText}" TextWrapping="Wrap" LineHeight="20"
+                           Foreground="{StaticResource FlyoutTextPrimaryBrush}" FontSize="13" />
+              </StackPanel>
+            </Border>
+
+            
+            <Border Background="{StaticResource FlyoutBackgroundBrush}" CornerRadius="8" Padding="16">
+              <StackPanel Spacing="8">
+                <TextBlock Text="{DynamicResource AboutIntegrationSectionTitle}" FontWeight="Bold"
+                           Foreground="{StaticResource FlyoutAccentBrush}" />
+                <TextBlock Text="{DynamicResource AboutIntegrationIntro}" TextWrapping="Wrap" LineHeight="20"
+                           Foreground="{StaticResource FlyoutTextPrimaryBrush}" FontSize="13" />
+
+                <Border Background="{StaticResource FlyoutSurfaceBrush}" CornerRadius="6" Padding="10" Margin="0,4,0,0">
+                  <SelectableTextBlock FontFamily="Consolas,Courier New,monospace" FontSize="11"
+                                       Foreground="{StaticResource FlyoutTextPrimaryBrush}" TextWrapping="Wrap"
+                                       Text="curl -X POST http://127.0.0.1:4399/api/notify -H &quot;Content-Type: application/json&quot; -H &quot;X-Api-Key: YOUR_KEY&quot; -d '{&quot;header&quot;:&quot;1С&quot;,&quot;description&quot;:&quot;TEXT&quot;,&quot;type&quot;:&quot;info&quot;,&quot;ResponseBody&quot;:{}}'" />
+                </Border>
+
+                <TextBlock Text="{DynamicResource AboutIntegrationEndpointsTitle}" FontWeight="Bold" FontSize="12"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" Margin="0,6,0,0" />
+                <StackPanel Spacing="2">
+                  <TextBlock Text="POST   /api/notify" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="GET    /api/history" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="GET    /api/history/senders" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="POST   /api/history/{id}/read" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="GET    /api/settings" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="PUT    /api/settings" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="GET    /api/apikeys" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="POST   /api/apikeys" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                  <TextBlock Text="DELETE /api/apikeys/{id}" FontFamily="Consolas,Courier New,monospace" FontSize="11" Foreground="{StaticResource FlyoutTextPrimaryBrush}" />
+                </StackPanel>
+
+                <TextBlock Text="{DynamicResource AboutIntegrationNote}" TextWrapping="Wrap" FontSize="11"
+                           Foreground="{StaticResource FlyoutTextSecondaryBrush}" Margin="0,6,0,0" />
+              </StackPanel>
+            </Border>
+
+            <Border Height="8" />
+
+          </StackPanel>
+        </ScrollViewer>
+
+      </Grid>
+    </Border>
+
+    
+    <Border Width="6" HorizontalAlignment="Left" Background="Transparent" Cursor="SizeWestEast" Tag="West" PointerPressed="OnResizeGripPressed" />
+    <Border Width="6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" Tag="East" PointerPressed="OnResizeGripPressed" />
+    <Border Height="6" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNorthSouth" Tag="North" PointerPressed="OnResizeGripPressed" />
+    <Border Height="6" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNorthSouth" Tag="South" PointerPressed="OnResizeGripPressed" />
+    <Border Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="TopLeftCorner" Tag="NorthWest" PointerPressed="OnResizeGripPressed" />
+    <Border Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="TopRightCorner" Tag="NorthEast" PointerPressed="OnResizeGripPressed" />
+    <Border Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomLeftCorner" Tag="SouthWest" PointerPressed="OnResizeGripPressed" />
+    <Border Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomRightCorner" Tag="SouthEast" PointerPressed="OnResizeGripPressed" />
+
+  </Grid>
+
+</Window>

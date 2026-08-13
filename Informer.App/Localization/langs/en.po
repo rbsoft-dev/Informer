@@ -1,0 +1,226 @@
+﻿msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Tray
+msgid "TrayHistory"
+msgstr "Notification History"
+
+msgid "TraySettings"
+msgstr "Settings"
+
+msgid "TrayExit"
+msgstr "Exit"
+
+# History window
+msgid "HistoryTitle"
+msgstr "Notification History"
+
+msgid "HistorySenderLabel"
+msgstr "Sender:"
+
+msgid "HistoryRefreshButton"
+msgstr "Refresh"
+
+msgid "ColHistoryTime"
+msgstr "Time"
+
+msgid "ColHistorySender"
+msgstr "Sender"
+
+msgid "ColHistoryType"
+msgstr "Type"
+
+msgid "ColHistoryDescription"
+msgstr "Description"
+
+msgid "ColHistoryRead"
+msgstr "Read"
+
+msgid "CtxCopyText"
+msgstr "Copy text"
+
+msgid "CtxDelete"
+msgstr "Delete"
+
+msgid "AllSendersOption"
+msgstr "All senders"
+
+# Severity
+msgid "SeverityError"
+msgstr "Error"
+
+msgid "SeverityWarning"
+msgstr "Warning"
+
+msgid "SeverityInfo"
+msgstr "Message"
+
+# Settings window
+msgid "SettingsTitle"
+msgstr "Settings"
+
+msgid "TrayAbout"
+msgstr "About"
+
+msgid "AppNameLabel"
+msgstr "Informer"
+
+msgid "AboutAuthorName"
+msgstr "Evgeniy Ershov / RBSoft"
+
+msgid "SectionRetention"
+msgstr "History retention"
+
+msgid "RetentionLabel"
+msgstr "Delete messages older than (days):"
+
+msgid "SectionSecurity"
+msgstr "Security"
+
+msgid "RequireApiKeyCheckbox"
+msgstr "Require API key to accept notifications"
+
+msgid "RateLimitDescription"
+msgstr "Request rate limit (anti-spam):"
+
+msgid "RateLimitMaxLabel"
+msgstr "Max requests:"
+
+msgid "RateLimitWindowLabel"
+msgstr "per (sec):"
+
+msgid "SectionServerPort"
+msgstr "Server port"
+
+msgid "ServerPortLabel"
+msgstr "Port:"
+
+msgid "ServerPortHint"
+msgstr "Changing this takes effect after restarting the application."
+
+msgid "SectionNotifications"
+msgstr "Notifications"
+
+msgid "ToastDurationLabel"
+msgstr "Toast display duration (sec):"
+
+msgid "SectionDisplayPolicy"
+msgstr "Display policy"
+
+msgid "DisplayPolicyDescription"
+msgstr "Which message types pop up as toasts (always visible in history):"
+
+msgid "ShowInfoCheckbox"
+msgstr "Regular messages"
+
+msgid "ShowWarningCheckbox"
+msgstr "Warnings"
+
+msgid "ShowErrorCheckbox"
+msgstr "Errors"
+
+msgid "SectionLanguage"
+msgstr "Interface language"
+
+msgid "LanguageLabel"
+msgstr "Language:"
+
+msgid "SectionApiKeys"
+msgstr "API keys"
+
+msgid "ApiKeyActive"
+msgstr "active"
+
+msgid "ApiKeyRevoked"
+msgstr "revoked"
+
+msgid "RevokeButton"
+msgstr "Revoke"
+
+msgid "NewKeyWatermark"
+msgstr "Key name (e.g. 1C Main Base)"
+
+msgid "AddKeyButton"
+msgstr "Add key"
+
+msgid "CtxCopyKey"
+msgstr "Copy key"
+
+msgid "CtxDeleteKey"
+msgstr "Delete"
+
+msgid "SaveButton"
+msgstr "Save"
+
+# Settings status messages
+msgid "ErrRetentionRequired"
+msgstr "Please enter the history retention period in days."
+
+msgid "ErrRetentionMin"
+msgstr "Retention period must be at least 1 day."
+
+msgid "ErrToastSecondsRequired"
+msgstr "Please enter the toast display duration."
+
+msgid "ErrRateMaxRequired"
+msgstr "Please enter the max requests for anti-spam."
+
+msgid "ErrRateWindowRequired"
+msgstr "Please enter the anti-spam time window (sec)."
+
+msgid "ErrPortRequired"
+msgstr "Please enter the server port."
+
+msgid "ErrPortRange"
+msgstr "Port must be between 1 and 65535."
+
+msgid "ErrSettingsEmpty"
+msgstr "Error: settings table is empty."
+
+msgid "MsgSaved"
+msgstr "Settings saved."
+
+msgid "MsgSavedPortRestart"
+msgstr "Settings saved. The new port takes effect after restarting the application."
+
+# "New messages" bell (toast + history)
+msgid "NewMessagesTooltip"
+msgstr "New messages"
+
+msgid "ShowFullMessage"
+msgstr "Show full message"
+
+# "About" window
+msgid "AboutTitle"
+msgstr "About"
+
+msgid "AboutVersionLabel"
+msgstr "Version"
+
+msgid "AboutAuthorLabel"
+msgstr "Developer"
+
+msgid "AboutLicenseText"
+msgstr "Free to use under the MIT License — use, modify, and embed it in your own projects freely."
+
+msgid "AboutUsageSectionTitle"
+msgstr "How to use"
+
+msgid "AboutUsageText"
+msgstr "Informer lives in the system tray — right-click the icon to open the menu: Notification History, Settings, About, Exit.\n\nNew notifications appear as a popup toast in the bottom-right corner. If several messages arrive close together, the ◀ ▶ arrows let you page through them without opening History, and the 🔔 bell jumps straight to the newest one. If the text doesn't fit, a \"Show full message\" button expands the toast.\n\nThe History window keeps a full list of every notification, filterable by sender, with a manual \"read\" checkbox.\n\nIn Settings you can change the interface language, history retention period, server port, whether an API key is required, the anti-spam rate limit, and which message types pop up as toasts."
+
+msgid "AboutIntegrationSectionTitle"
+msgstr "Integration"
+
+msgid "AboutIntegrationIntro"
+msgstr "Informer accepts notifications via a plain HTTP POST request with a JSON body — any system capable of sending one works (1C, scripts, third-party services)."
+
+msgid "AboutIntegrationEndpointsTitle"
+msgstr "Available endpoints:"
+
+msgid "AboutIntegrationNote"
+msgstr "The \"type\" field is optional (info/warning/error, defaults to info) — it only affects the toast's border color. The X-Api-Key header is only required if \"Require API key\" is enabled in Settings."

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,6 +16,7 @@ namespace Informer.App.ViewModels;
 
 public partial class SettingsWindowViewModel : ObservableObject
 {
+    private static readonly HttpClient DownloadHttp = new() { Timeout = TimeSpan.FromSeconds(15) };
     private readonly IServiceScopeFactory _scopeFactory;
     private bool _isLoadingLanguage;
 
@@ -43,10 +46,20 @@ public partial class SettingsWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private int? _listenPort = 4399;
-    public ObservableCollection<string> LanguageOptions { get; } = new() { "Русский", "English" };
+
+    public ObservableCollection<LanguageInfo> LanguageOptions { get; } = new();
 
     [ObservableProperty]
-    private string _selectedLanguageDisplay = "Русский";
+    private LanguageInfo? _selectedLanguage;
+
+    [ObservableProperty]
+    private string _languagePackUrl = string.Empty;
+
+    [ObservableProperty]
+    private string? _languagePackStatus;
+
+    [ObservableProperty]
+    private bool _isLanguagePackError;
 
     [ObservableProperty]
     private ObservableCollection<ApiKeyEntity> _apiKeys = new();
@@ -84,8 +97,11 @@ public partial class SettingsWindowViewModel : ObservableObject
             RateLimitWindowSeconds = settings.RateLimitWindowSeconds;
             ListenPort = settings.ListenPort;
 
+            RefreshLanguageOptions();
+
             _isLoadingLanguage = true;
-            SelectedLanguageDisplay = settings.Language == "en" ? "English" : "Русский";
+            SelectedLanguage = LanguageOptions.FirstOrDefault(l => l.Code == settings.Language)
+                ?? LanguageOptions.FirstOrDefault();
             _isLoadingLanguage = false;
         }
 
@@ -94,20 +110,39 @@ public partial class SettingsWindowViewModel : ObservableObject
             .ToListAsync();
         ApiKeys = new ObservableCollection<ApiKeyEntity>(keys);
     }
-
-    partial void OnSelectedLanguageDisplayChanged(string value)
+    private void RefreshLanguageOptions()
     {
-        if (_isLoadingLanguage)
+        var current = SelectedLanguage;
+
+        LanguageOptions.Clear();
+        foreach (var lang in LocalizationManager.AvailableLanguages)
+        {
+            LanguageOptions.Add(lang);
+        }
+
+        if (current is not null)
+        {
+            var stillThere = LanguageOptions.FirstOrDefault(l => l.Code == current.Code);
+            if (stillThere is not null)
+            {
+                _isLoadingLanguage = true;
+                SelectedLanguage = stillThere;
+                _isLoadingLanguage = false;
+            }
+        }
+    }
+    partial void OnSelectedLanguageChanged(LanguageInfo? value)
+    {
+        if (_isLoadingLanguage || value is null)
         {
             return;
         }
 
-        var language = value == "English" ? AppLanguage.English : AppLanguage.Russian;
-        LocalizationManager.Apply(language);
-        _ = PersistLanguageAsync(language);
+        LocalizationManager.Apply(value.Code);
+        _ = PersistLanguageAsync(value.Code);
     }
 
-    private async Task PersistLanguageAsync(AppLanguage language)
+    private async Task PersistLanguageAsync(string code)
     {
         using var scope = _scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<InformerDbContext>();
@@ -115,7 +150,7 @@ public partial class SettingsWindowViewModel : ObservableObject
         var settings = await db.AppSettings.FirstOrDefaultAsync();
         if (settings is not null)
         {
-            settings.Language = language == AppLanguage.English ? "en" : "ru";
+            settings.Language = code;
             await db.SaveChangesAsync();
         }
     }
@@ -199,6 +234,57 @@ public partial class SettingsWindowViewModel : ObservableObject
             ? LocalizationManager.Get("MsgSavedPortRestart")
             : LocalizationManager.Get("MsgSaved");
         IsStatusError = false;
+    }
+
+    [RelayCommand]
+    private async Task DownloadLanguagePack()
+    {
+        if (string.IsNullOrWhiteSpace(LanguagePackUrl))
+        {
+            LanguagePackStatus = LocalizationManager.Get("ErrLangUrlRequired");
+            IsLanguagePackError = true;
+            return;
+        }
+
+        try
+        {
+            var bytes = await DownloadHttp.GetByteArrayAsync(LanguagePackUrl);
+
+            var rawName = Path.GetFileName(new Uri(LanguagePackUrl).LocalPath);
+            if (string.IsNullOrWhiteSpace(rawName)
+                || !rawName.EndsWith(".po", StringComparison.OrdinalIgnoreCase)
+                || rawName.Contains("..", StringComparison.Ordinal))
+            {
+                LanguagePackStatus = LocalizationManager.Get("ErrLangBadFile");
+                IsLanguagePackError = true;
+                return;
+            }
+
+            var langsDir = Path.Combine(AppContext.BaseDirectory, "Localization", "langs");
+            Directory.CreateDirectory(langsDir);
+            var destPath = Path.Combine(langsDir, rawName);
+
+            await File.WriteAllBytesAsync(destPath, bytes);
+
+            LocalizationManager.RescanAvailableLanguages();
+            RefreshLanguageOptions();
+
+            var newCode = Path.GetFileNameWithoutExtension(rawName);
+            var newLang = LanguageOptions.FirstOrDefault(l => l.Code == newCode);
+            if (newLang is not null)
+            {
+                SelectedLanguage = newLang;
+            }
+
+            LanguagePackStatus = LocalizationManager.Get("MsgLangInstalled");
+            IsLanguagePackError = false;
+            LanguagePackUrl = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            LanguagePackStatus = $"{LocalizationManager.Get("ErrLangDownloadFailed")}: {ex.Message}";
+            IsLanguagePackError = true;
+        }
     }
 
     [RelayCommand]

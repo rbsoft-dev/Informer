@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Informer.App.ViewModels"
+        xmlns:loc="using:Informer.App.Localization"
         x:Class="Informer.App.Views.SettingsWindow"
         x:DataType="vm:SettingsWindowViewModel"
         Title="Информер — Настройки"
@@ -56,7 +57,13 @@
                 <TextBlock Text="{DynamicResource LanguageLabel}" VerticalAlignment="Center"
                            Foreground="{StaticResource FlyoutTextSecondaryBrush}" />
                 <ComboBox ItemsSource="{Binding LanguageOptions}"
-                          SelectedItem="{Binding SelectedLanguageDisplay}" Width="160" />
+                  SelectedItem="{Binding SelectedLanguage}" Width="160">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="loc:LanguageInfo">
+                      <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
               </StackPanel>
             </StackPanel>
           </Border>
@@ -189,7 +196,14 @@
            <Border Height="12" />
         </StackPanel>
       </ScrollViewer>
-
+        <Border Width="6" HorizontalAlignment="Left" Background="Transparent" Cursor="SizeWestEast" Tag="West" PointerPressed="OnResizeGripPressed" />
+        <Border Width="6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" Tag="East" PointerPressed="OnResizeGripPressed" />
+        <Border Height="6" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNorthSouth" Tag="North" PointerPressed="OnResizeGripPressed" />
+        <Border Height="6" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNorthSouth" Tag="South" PointerPressed="OnResizeGripPressed" />
+        <Border Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="TopLeftCorner" Tag="NorthWest" PointerPressed="OnResizeGripPressed" />
+        <Border Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="TopRightCorner" Tag="NorthEast" PointerPressed="OnResizeGripPressed" />
+        <Border Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomLeftCorner" Tag="SouthWest" PointerPressed="OnResizeGripPressed" />
+        <Border Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomRightCorner" Tag="SouthEast" PointerPressed="OnResizeGripPressed" />
     </Grid>
   </Border>
 
