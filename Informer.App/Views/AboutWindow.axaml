@@ -3,7 +3,7 @@
         xmlns:vm="using:Informer.App.ViewModels"
         x:Class="Informer.App.Views.AboutWindow"
         x:DataType="vm:AboutWindowViewModel"
-        Title="Информер — О нас"
+        Title="Информер — О программе"
         Icon="/Assets/tray-icon.ico"
         Width="560" Height="640"
         MinWidth="420" MinHeight="360"

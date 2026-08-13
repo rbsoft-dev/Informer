@@ -1,0 +1,245 @@
+﻿msgid ""
+msgstr ""
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Barre système
+msgid "TrayHistory"
+msgstr "Historique des notifications"
+
+msgid "TraySettings"
+msgstr "Paramètres"
+
+msgid "TrayAbout"
+msgstr "À propos"
+
+msgid "TrayExit"
+msgstr "Quitter"
+
+# Fenêtre d'historique
+msgid "HistoryTitle"
+msgstr "Historique des notifications"
+
+msgid "HistorySenderLabel"
+msgstr "Expéditeur :"
+
+msgid "HistoryRefreshButton"
+msgstr "Actualiser"
+
+msgid "ColHistoryTime"
+msgstr "Heure"
+
+msgid "ColHistorySender"
+msgstr "Expéditeur"
+
+msgid "ColHistoryType"
+msgstr "Type"
+
+msgid "ColHistoryDescription"
+msgstr "Description"
+
+msgid "ColHistoryRead"
+msgstr "Lu"
+
+msgid "CtxCopyText"
+msgstr "Copier le texte"
+
+msgid "CtxDelete"
+msgstr "Supprimer"
+
+msgid "AllSendersOption"
+msgstr "Tous les expéditeurs"
+
+# Gravité
+msgid "SeverityError"
+msgstr "Erreur"
+
+msgid "SeverityWarning"
+msgstr "Avertissement"
+
+msgid "SeverityInfo"
+msgstr "Message"
+
+# Fenêtre des paramètres
+msgid "SettingsTitle"
+msgstr "Paramètres"
+
+msgid "SectionRetention"
+msgstr "Conservation de l'historique"
+
+msgid "RetentionLabel"
+msgstr "Supprimer les messages de plus de (jours) :"
+
+msgid "SectionSecurity"
+msgstr "Sécurité"
+
+msgid "RequireApiKeyCheckbox"
+msgstr "Exiger une clé API pour accepter les notifications"
+
+msgid "RateLimitDescription"
+msgstr "Limite de fréquence des requêtes (anti-spam) :"
+
+msgid "RateLimitMaxLabel"
+msgstr "Requêtes maximum :"
+
+msgid "RateLimitWindowLabel"
+msgstr "par (sec) :"
+
+msgid "SectionServerPort"
+msgstr "Port du serveur"
+
+msgid "ServerPortLabel"
+msgstr "Port :"
+
+msgid "ServerPortHint"
+msgstr "La modification prendra effet après le redémarrage de l'application."
+
+msgid "SectionNotifications"
+msgstr "Notifications"
+
+msgid "ToastDurationLabel"
+msgstr "Durée d'affichage du toast (sec) :"
+
+msgid "SectionDisplayPolicy"
+msgstr "Politique d'affichage"
+
+msgid "DisplayPolicyDescription"
+msgstr "Quels types de messages afficher sous forme de notifications contextuelles (toujours visibles dans l'historique) :"
+
+msgid "ShowInfoCheckbox"
+msgstr "Messages ordinaires"
+
+msgid "ShowWarningCheckbox"
+msgstr "Avertissements"
+
+msgid "ShowErrorCheckbox"
+msgstr "Erreurs"
+
+msgid "SectionLanguage"
+msgstr "Langue de l'interface"
+
+msgid "LanguageLabel"
+msgstr "Langue :"
+
+msgid "SectionApiKeys"
+msgstr "Clés API"
+
+msgid "ApiKeyActive"
+msgstr "active"
+
+msgid "ApiKeyRevoked"
+msgstr "révoquée"
+
+msgid "RevokeButton"
+msgstr "Révoquer"
+
+msgid "NewKeyWatermark"
+msgstr "Nom de la clé (ex. 1C Base principale)"
+
+msgid "AddKeyButton"
+msgstr "Ajouter une clé"
+
+msgid "CtxCopyKey"
+msgstr "Copier la clé"
+
+msgid "CtxDeleteKey"
+msgstr "Supprimer"
+
+msgid "SaveButton"
+msgstr "Enregistrer"
+
+# Messages de statut des paramètres
+msgid "ErrRetentionRequired"
+msgstr "Veuillez indiquer la durée de conservation de l'historique en jours."
+
+msgid "ErrRetentionMin"
+msgstr "La durée de conservation doit être d'au moins 1 jour."
+
+msgid "ErrToastSecondsRequired"
+msgstr "Veuillez indiquer la durée d'affichage du toast."
+
+msgid "ErrRateMaxRequired"
+msgstr "Veuillez indiquer le nombre maximum de requêtes pour l'anti-spam."
+
+msgid "ErrRateWindowRequired"
+msgstr "Veuillez indiquer la fenêtre de temps (sec) pour l'anti-spam."
+
+msgid "ErrPortRequired"
+msgstr "Veuillez indiquer le port du serveur."
+
+msgid "ErrPortRange"
+msgstr "Le port doit être compris entre 1 et 65535."
+
+msgid "ErrSettingsEmpty"
+msgstr "Erreur : la table des paramètres est vide."
+
+msgid "MsgSaved"
+msgstr "Paramètres enregistrés."
+
+msgid "MsgSavedPortRestart"
+msgstr "Paramètres enregistrés. Le nouveau port prendra effet après le redémarrage de l'application."
+
+# Cloche "nouveaux messages" (toast + historique)
+msgid "NewMessagesTooltip"
+msgstr "Nouveaux messages"
+
+msgid "ShowFullMessage"
+msgstr "Afficher le message complet"
+
+# Téléchargement d'un pack de langue
+msgid "LanguagePackUrlWatermark"
+msgstr "Lien vers un fichier .po"
+
+msgid "DownloadLanguageButton"
+msgstr "Télécharger et installer"
+
+msgid "ErrLangUrlRequired"
+msgstr "Veuillez saisir un lien vers un pack de langue."
+
+msgid "ErrLangBadFile"
+msgstr "Le lien doit pointer vers un fichier .po."
+
+msgid "ErrLangDownloadFailed"
+msgstr "Échec du téléchargement du pack de langue"
+
+msgid "MsgLangInstalled"
+msgstr "Pack de langue installé et appliqué."
+
+# Fenêtre "À propos"
+msgid "AboutTitle"
+msgstr "À propos"
+
+msgid "AppNameLabel"
+msgstr "Informer"
+
+msgid "AboutAuthorName"
+msgstr "Evgeniy Ershov / RBSoft"
+
+msgid "AboutVersionLabel"
+msgstr "Version"
+
+msgid "AboutAuthorLabel"
+msgstr "Développeur"
+
+msgid "AboutLicenseText"
+msgstr "Distribué gratuitement sous licence MIT — utilisez, modifiez et intégrez-le librement dans vos propres projets."
+
+msgid "AboutUsageSectionTitle"
+msgstr "Comment l'utiliser"
+
+msgid "AboutUsageText"
+msgstr "Informer réside dans la barre système — un clic droit sur l'icône ouvre le menu : Historique des notifications, Paramètres, À propos, Quitter.\n\nLes nouvelles notifications apparaissent sous forme de toast en bas à droite de l'écran. Si plusieurs messages arrivent rapprochés, les flèches ◀ ▶ permettent de les parcourir sans ouvrir l'historique, et la cloche 🔔 permet d'accéder directement au plus récent. Si le texte est trop long, un bouton « Afficher le message complet » développe le toast.\n\nLa fenêtre d'historique conserve la liste complète de toutes les notifications, filtrable par expéditeur, avec une case à cocher « lu » modifiable manuellement.\n\nDans les Paramètres, vous pouvez changer la langue de l'interface, la durée de conservation de l'historique, le port du serveur, si une clé API est requise, la limite anti-spam, et quels types de messages s'affichent en toast."
+
+msgid "AboutIntegrationSectionTitle"
+msgstr "Intégration"
+
+msgid "AboutIntegrationIntro"
+msgstr "Informer accepte les notifications via une simple requête HTTP POST avec un corps JSON — tout système capable d'envoyer une telle requête convient (1C, scripts, services tiers)."
+
+msgid "AboutIntegrationEndpointsTitle"
+msgstr "Points de terminaison disponibles :"
+
+msgid "AboutIntegrationNote"
+msgstr "Le champ « type » est facultatif (info/warning/error, par défaut info) — il n'affecte que la couleur de la bordure du toast. L'en-tête X-Api-Key n'est requis que si « Exiger une clé API » est activé dans les Paramètres."

@@ -32,7 +32,7 @@
           <NativeMenu>
            <NativeMenuItem Header="История уведомлений" Click="OnHistoryMenuClick" />
            <NativeMenuItem Header="Настройки" Click="OnSettingsMenuClick" />
-           <NativeMenuItem Header="О нас" Click="OnAboutMenuClick" />
+           <NativeMenuItem Header="О программе" Click="OnAboutMenuClick" />
            <NativeMenuItemSeparator />
            <NativeMenuItem Header="Выход" Click="OnExitMenuClick" />
           </NativeMenu>
