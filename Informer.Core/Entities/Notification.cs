@@ -17,13 +17,10 @@ public class Notification
     /// </summary>
     public string Sender { get; set; } = string.Empty;
 
-    /// <summary>Human readable description / title shown in the toast and history list.</summary>
     public string Description { get; set; } = string.Empty;
 
-    /// <summary>Raw JSON of the "ResponseBody" object, stored as-is for later inspection.</summary>
     public string ResponseBodyJson { get; set; } = string.Empty;
 
-    /// <summary>Remote IP address the notification was received from (audit / anti-spam).</summary>
     public string? RemoteIpAddress { get; set; }
 
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;

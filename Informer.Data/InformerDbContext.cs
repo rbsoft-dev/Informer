@@ -5,9 +5,7 @@ namespace Informer.Data;
 
 public class InformerDbContext : DbContext
 {
-    public InformerDbContext(DbContextOptions<InformerDbContext> options) : base(options)
-    {
-    }
+    public InformerDbContext(DbContextOptions<InformerDbContext> options) : base(options){}
 
     public DbSet<Notification> Notifications => Set<Notification>();
 
