@@ -1,8 +1,9 @@
 namespace Informer.Core.Entities;
 
 /// <summary>
-/// Registered API key allowed to POST notifications. Multiple senders can share the
-/// application, each with its own key, so keys can be revoked individually.
+/// Зарегистрированный API-ключ, которому разрешено отправлять уведомления через POST.
+/// Приложение может использоваться несколькими отправителями, каждый со своим ключом,
+/// поэтому ключи можно отзывать по отдельности.
 /// </summary>
 public class ApiKeyEntity
 {

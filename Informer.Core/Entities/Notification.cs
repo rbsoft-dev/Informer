@@ -1,18 +1,19 @@
 namespace Informer.Core.Entities;
 
 /// <summary>
-/// A single stored notification received from an external sender (e.g. 1C driver).
-/// "Sender" corresponds to the free-form "header" value from the incoming JSON envelope
-/// and is NOT a foreign key — it is stored and filtered as a raw string, because the
-/// value is generated dynamically by the sending side and cannot be enumerated in advance.
+/// Отдельное сохранённое уведомление, полученное от внешнего отправителя (например,
+/// драйвера 1С). "Sender" соответствует произвольному значению "header" из входящего
+/// JSON-конверта и НЕ является внешним ключом — оно хранится и фильтруется как обычная
+/// строка, поскольку значение формируется динамически на стороне отправителя и не может
+/// быть заранее перечислено.
 /// </summary>
 public class Notification
 {
     public int Id { get; set; }
 
     /// <summary>
-    /// Free-form sender identifier taken from the "header" field of the incoming JSON.
-    /// Example: "1C:Session:MainBase:ivanov".
+    /// Произвольный идентификатор отправителя, взятый из поля "header" входящего JSON.
+    /// Пример: "1C:Session:MainBase:ivanov".
     /// </summary>
     public string Sender { get; set; } = string.Empty;
 

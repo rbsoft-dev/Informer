@@ -1,8 +1,8 @@
 namespace Informer.Core.Entities;
 
 /// <summary>
-/// Single-row table holding runtime-configurable application settings.
-/// Always accessed by Id == 1 (see InformerDbContext seed).
+/// Таблица из одной строки, содержащая настраиваемые во время выполнения параметры
+/// приложения. Доступ всегда осуществляется по Id == 1 (см. seed в InformerDbContext).
 /// </summary>
 public class AppSettingsEntity
 {

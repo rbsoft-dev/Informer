@@ -103,25 +103,19 @@ public static class LocalizationManager
         var displayNames = LoadLangIni();
         var list = new List<LanguageInfo>();
 
-        try
+        if (Directory.Exists(LangsDirectory))
         {
-            if (Directory.Exists(LangsDirectory))
+            foreach (var file in Directory.EnumerateFiles(LangsDirectory, "*.po"))
             {
-                foreach (var file in Directory.EnumerateFiles(LangsDirectory, "*.po"))
-                {
-                    var code = Path.GetFileNameWithoutExtension(file);
-                    if (string.IsNullOrWhiteSpace(code)) continue;
+                var code = Path.GetFileNameWithoutExtension(file);
+                if (string.IsNullOrWhiteSpace(code)) continue;
 
-                    var displayName = displayNames.TryGetValue(code, out var fromIni) && !string.IsNullOrWhiteSpace(fromIni)
-                        ? fromIni
-                        : GetNativeDisplayName(code);
+                var displayName = displayNames.TryGetValue(code, out var fromIni) && !string.IsNullOrWhiteSpace(fromIni)
+                    ? fromIni
+                    : GetNativeDisplayName(code);
 
-                    list.Add(new LanguageInfo(code, displayName));
-                }
+                list.Add(new LanguageInfo(code, displayName));
             }
-        }
-        catch
-        {
         }
 
         if (list.Count == 0)
@@ -135,29 +129,23 @@ public static class LocalizationManager
     private static Dictionary<string, string> LoadLangIni()
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-        try
+        
+        var path = Path.Combine(LangsDirectory, "lang.ini");
+        if (!File.Exists(path))
         {
-            var path = Path.Combine(LangsDirectory, "lang.ini");
-            if (!File.Exists(path))
-            {
-                return result;
-            }
-
-            var config = new ConfigurationBuilder()
-                .AddIniFile(path, optional: true)
-                .Build();
-
-            foreach (var section in config.AsEnumerable())
-            {
-                if (!string.IsNullOrEmpty(section.Key) && section.Value is not null)
-                {
-                    result[section.Key] = section.Value;
-                }
-            }
+            return result;
         }
-        catch
+
+        var config = new ConfigurationBuilder()
+            .AddIniFile(path, optional: true)
+            .Build();
+
+        foreach (var section in config.AsEnumerable())
         {
+            if (!string.IsNullOrEmpty(section.Key) && section.Value is not null)
+            {
+                result[section.Key] = section.Value;
+            }
         }
 
         return result;

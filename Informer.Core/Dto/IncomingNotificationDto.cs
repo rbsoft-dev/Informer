@@ -4,18 +4,19 @@ using System.Text.Json.Serialization;
 namespace Informer.Core.Dto;
 
 /// <summary>
-/// Mirrors the JSON envelope produced by the sender (e.g. the 1C driver):
+/// Отражает JSON-конверт, формируемый отправителем (например, драйвером 1С):
 /// {
 ///   "header": "...",
 ///   "description": "...",
 ///   "ApiKey": "...",
 ///   "type": "info" | "warning" | "error",
-///   "ResponseBody": { ... arbitrary ... }
+///   "ResponseBody": { ... произвольные данные ... }
 /// }
-/// "header" is the free-form sender identifier (see project notes) — it is stored
-/// verbatim and used only for display/filtering, never for authorization.
-/// "type" is optional and case-insensitive; unrecognized or missing values default to
-/// "info" (see NotificationEndpoints.ParseSeverity).
+/// "header" — это произвольный идентификатор отправителя (см. заметки по проекту) —
+/// сохраняется как есть и используется только для отображения/фильтрации, но никогда
+/// для авторизации.
+/// "type" необязателен и не зависит от регистра; нераспознанные или отсутствующие
+/// значения по умолчанию принимаются как "info" (см. NotificationEndpoints.ParseSeverity).
 /// </summary>
 public class IncomingNotificationDto
 {

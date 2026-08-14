@@ -8,13 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Informer.App.Services;
 
-/// <summary>
-/// Implements requirement 5: notifications older than the configured "RetentionDays"
-/// are periodically purged from the database. Runs once at startup and then every
-/// 24 hours for the lifetime of the process; not registered as an ASP.NET
-/// BackgroundService because it needs to keep running even while Kestrel is idle and
-/// its lifetime is tied to the Avalonia app, not the web host.
-/// </summary>
 public class BackgroundCleanupService
 {
     private static readonly TimeSpan CheckInterval = TimeSpan.FromHours(24);

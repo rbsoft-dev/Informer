@@ -1,0 +1,245 @@
+﻿msgid ""
+msgstr ""
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 系统托盘
+msgid "TrayHistory"
+msgstr "通知历史"
+
+msgid "TraySettings"
+msgstr "设置"
+
+msgid "TrayAbout"
+msgstr "关于"
+
+msgid "TrayExit"
+msgstr "退出"
+
+# 历史记录窗口
+msgid "HistoryTitle"
+msgstr "通知历史"
+
+msgid "HistorySenderLabel"
+msgstr "发送者："
+
+msgid "HistoryRefreshButton"
+msgstr "刷新"
+
+msgid "ColHistoryTime"
+msgstr "时间"
+
+msgid "ColHistorySender"
+msgstr "发送者"
+
+msgid "ColHistoryType"
+msgstr "类型"
+
+msgid "ColHistoryDescription"
+msgstr "描述"
+
+msgid "ColHistoryRead"
+msgstr "已读"
+
+msgid "CtxCopyText"
+msgstr "复制文本"
+
+msgid "CtxDelete"
+msgstr "删除"
+
+msgid "AllSendersOption"
+msgstr "所有发送者"
+
+# 严重程度
+msgid "SeverityError"
+msgstr "错误"
+
+msgid "SeverityWarning"
+msgstr "警告"
+
+msgid "SeverityInfo"
+msgstr "消息"
+
+# 设置窗口
+msgid "SettingsTitle"
+msgstr "设置"
+
+msgid "SectionRetention"
+msgstr "历史记录保留"
+
+msgid "RetentionLabel"
+msgstr "删除早于（天数）的消息："
+
+msgid "SectionSecurity"
+msgstr "安全"
+
+msgid "RequireApiKeyCheckbox"
+msgstr "接收通知需要 API 密钥"
+
+msgid "RateLimitDescription"
+msgstr "请求频率限制（防垃圾信息）："
+
+msgid "RateLimitMaxLabel"
+msgstr "最大请求数："
+
+msgid "RateLimitWindowLabel"
+msgstr "每（秒）："
+
+msgid "SectionServerPort"
+msgstr "服务器端口"
+
+msgid "ServerPortLabel"
+msgstr "端口："
+
+msgid "ServerPortHint"
+msgstr "更改将在重启应用程序后生效。"
+
+msgid "SectionNotifications"
+msgstr "通知"
+
+msgid "ToastDurationLabel"
+msgstr "提示显示时长（秒）："
+
+msgid "SectionDisplayPolicy"
+msgstr "显示策略"
+
+msgid "DisplayPolicyDescription"
+msgstr "哪些类型的消息会以弹出提示显示（历史记录中始终可见）："
+
+msgid "ShowInfoCheckbox"
+msgstr "普通消息"
+
+msgid "ShowWarningCheckbox"
+msgstr "警告"
+
+msgid "ShowErrorCheckbox"
+msgstr "错误"
+
+msgid "SectionLanguage"
+msgstr "界面语言"
+
+msgid "LanguageLabel"
+msgstr "语言："
+
+msgid "SectionApiKeys"
+msgstr "API 密钥"
+
+msgid "ApiKeyActive"
+msgstr "有效"
+
+msgid "ApiKeyRevoked"
+msgstr "已撤销"
+
+msgid "RevokeButton"
+msgstr "撤销"
+
+msgid "NewKeyWatermark"
+msgstr "密钥名称（例如：1C 主数据库）"
+
+msgid "AddKeyButton"
+msgstr "添加密钥"
+
+msgid "CtxCopyKey"
+msgstr "复制密钥"
+
+msgid "CtxDeleteKey"
+msgstr "删除"
+
+msgid "SaveButton"
+msgstr "保存"
+
+# 设置状态消息
+msgid "ErrRetentionRequired"
+msgstr "请输入历史记录保留天数。"
+
+msgid "ErrRetentionMin"
+msgstr "保留天数必须至少为 1 天。"
+
+msgid "ErrToastSecondsRequired"
+msgstr "请输入提示显示时长。"
+
+msgid "ErrRateMaxRequired"
+msgstr "请输入防垃圾信息的最大请求数。"
+
+msgid "ErrRateWindowRequired"
+msgstr "请输入防垃圾信息的时间窗口（秒）。"
+
+msgid "ErrPortRequired"
+msgstr "请输入服务器端口。"
+
+msgid "ErrPortRange"
+msgstr "端口必须在 1 到 65535 之间。"
+
+msgid "ErrSettingsEmpty"
+msgstr "错误：设置表为空。"
+
+msgid "MsgSaved"
+msgstr "设置已保存。"
+
+msgid "MsgSavedPortRestart"
+msgstr "设置已保存。新端口将在重启应用程序后生效。"
+
+# "新消息"提示（弹窗 + 历史记录）
+msgid "NewMessagesTooltip"
+msgstr "新消息"
+
+msgid "ShowFullMessage"
+msgstr "显示完整消息"
+
+# 下载语言包
+msgid "LanguagePackUrlWatermark"
+msgstr ".po 文件链接"
+
+msgid "DownloadLanguageButton"
+msgstr "下载并安装"
+
+msgid "ErrLangUrlRequired"
+msgstr "请输入语言包链接。"
+
+msgid "ErrLangBadFile"
+msgstr "链接必须指向一个 .po 文件。"
+
+msgid "ErrLangDownloadFailed"
+msgstr "下载语言包失败"
+
+msgid "MsgLangInstalled"
+msgstr "语言包已安装并生效。"
+
+# "关于"窗口
+msgid "AboutTitle"
+msgstr "关于"
+
+msgid "AppNameLabel"
+msgstr "Informer"
+
+msgid "AboutAuthorName"
+msgstr "Evgeniy Ershov / RBSoft"
+
+msgid "AboutVersionLabel"
+msgstr "版本"
+
+msgid "AboutAuthorLabel"
+msgstr "开发者"
+
+msgid "AboutLicenseText"
+msgstr "基于 MIT 许可证免费提供 — 可自由使用、修改并集成到您自己的项目中。"
+
+msgid "AboutUsageSectionTitle"
+msgstr "使用方法"
+
+msgid "AboutUsageText"
+msgstr "Informer 运行在系统托盘中 — 右键单击图标打开菜单：通知历史、设置、关于、退出。\n\n新通知会在屏幕右下角以弹出提示的形式显示。如果连续收到多条消息，可以使用 ◀ ▶ 箭头翻阅，无需打开历史记录；点击铃铛图标 🔔 可直接跳转到最新的一条。如果文本过长，点击“显示完整消息”按钮即可展开提示框。\n\n通知历史窗口保存所有通知的完整列表，可按发送者筛选，并可手动勾选“已读”。\n\n在设置中，您可以更改界面语言、历史记录保留时间、服务器端口、是否需要 API 密钥、防垃圾信息的请求频率限制，以及哪些类型的消息会以弹出提示显示。"
+
+msgid "AboutIntegrationSectionTitle"
+msgstr "集成"
+
+msgid "AboutIntegrationIntro"
+msgstr "Informer 通过普通的 HTTP POST 请求（JSON 格式）接收通知 — 任何能够发送此类请求的系统均可使用（1C、脚本、第三方服务等）。"
+
+msgid "AboutIntegrationEndpointsTitle"
+msgstr "可用接口："
+
+msgid "AboutIntegrationNote"
+msgstr "“type”字段为可选项（info/warning/error，默认为 info）— 仅影响提示框边框的颜色。只有在设置中启用了“需要 API 密钥”时，才需要 X-Api-Key 请求头。"

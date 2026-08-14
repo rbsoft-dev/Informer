@@ -7,15 +7,6 @@ using Avalonia.Platform;
 
 namespace Informer.App.Utilities;
 
-/// <summary>
-/// Draws a small red "unread count" badge over the tray icon (top-right corner), the same
-/// visual pattern used by Slack/Gmail/etc. Rendered fresh whenever the unread count
-/// changes and assigned to TrayIcon.Icon.
-///
-/// This composites onto the app's own bundled icon (Assets/tray-icon.ico). If that file
-/// can't be decoded for any reason, a plain accent-colored circle is drawn instead so the
-/// badge itself still shows up rather than the whole thing silently failing.
-/// </summary>
 internal static class TrayBadgeRenderer
 {
     private const int Size = 32;
@@ -79,7 +70,7 @@ internal static class TrayBadgeRenderer
         }
         catch
         {
-            _baseIconCache = null; // fall back to the plain circle in Render()
+            _baseIconCache = null;
         }
 
         return _baseIconCache;

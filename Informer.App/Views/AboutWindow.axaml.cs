@@ -57,12 +57,6 @@ public partial class AboutWindow : Window
 
     private static void OpenUrl(string url)
     {
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch
-        {
-        }
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }
