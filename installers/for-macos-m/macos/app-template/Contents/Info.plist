@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Информер</string>
+    <key>CFBundleDisplayName</key>
+    <string>Информер</string>
+    <key>CFBundleIdentifier</key>
+    <string>ru.rbsoft.informer</string>
+    <key>CFBundleVersion</key>
+    <string>1.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleExecutable</key>
+    <string>Informer</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon.icns</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>11.0</string>
+    <!-- Приложение живёт только в menu bar (трей) — своего окна/Dock-иконки нет,
+         поэтому прячем из Dock и Cmd+Tab. Без этого флага macOS покажет generic-иконку
+         в Dock у "безымянного" процесса, как мы уже видели при запуске сырого бинарника
+         напрямую без бандла. -->
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>
