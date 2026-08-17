@@ -1,0 +1,12 @@
+# Файлы Linux/macOS-инсталляторов ДОЛЖНЫ иметь Unix-переносы строк (LF), иначе:
+# - .desktop не распознаётся окружением рабочего стола ("отсутствует приложение")
+# - shell-скрипты с CRLF падают с ошибкой "bad interpreter: /bin/bash^M: нет такого файла"
+# - control/postinst могут быть отклонены dpkg
+#
+# Без этого файла Git на Windows (при core.autocrlf=true, частая настройка) молча
+# конвертирует переносы строк в CRLF при каждом checkout — именно так этот баг и завёлся.
+
+installers/linux/**           text eol=lf
+installers/macos/**           text eol=lf
+*.sh                          text eol=lf
+*.desktop                     text eol=lf

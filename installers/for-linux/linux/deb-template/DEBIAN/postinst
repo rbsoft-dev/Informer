@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+chmod +x /usr/lib/informer/Informer
+chmod +x /usr/bin/informer
+
+# Обновляем кэш иконок и базы приложений, чтобы Информер сразу появился в меню
+# приложений без необходимости выхода из системы/перезагрузки. Обе команды
+# опциональны (могут отсутствовать на очень минимальных установках) — поэтому
+# "|| true", чтобы не проваливать установку пакета из-за отсутствия необязательной
+# утилиты.
+gtk-update-icon-cache -f /usr/share/icons/hicolor >/dev/null 2>&1 || true
+update-desktop-database /usr/share/applications >/dev/null 2>&1 || true
+
+exit 0

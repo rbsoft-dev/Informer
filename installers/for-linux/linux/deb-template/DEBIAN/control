@@ -1,0 +1,13 @@
+Package: informer
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libicu70 | libicu72 | libicu74, libssl3 | libssl1.1
+Maintainer: Евгений Ершов / RBSoft <online@rbsoft.ru>
+Homepage: https://rbsoft.ru
+Description: Трей-приложение для приёма уведомлений по HTTP из внешних систем
+ Информер принимает уведомления по HTTP (JSON) от внешних систем (1С, кассовое ПО,
+ скрипты), показывает их всплывающими тостами и хранит историю с фильтрацией по
+ отправителю. Поддерживает несколько языков интерфейса, гибкую настройку через
+ встроенный веб-API.
