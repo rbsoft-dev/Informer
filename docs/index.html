@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Информер — уведомления по HTTP на рабочий стол</title>
-<meta name="description" content="Информер — трей-приложение, принимающее уведомления по HTTP (JSON) из 1С, кассового ПО и скриптов, и показывающее их всплывающими тостами. Бесплатно, с открытым исходным кодом.">
+<meta name="description" content="Информер — трей-приложение, принимающее уведомления по HTTP (JSON) из 1С, кассового ПО и скриптов, и показывающее их всплывающими уведомлениями. Бесплатно, с открытым исходным кодом.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="tray-icon.ico" type="image/x-icon">
@@ -26,7 +26,8 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { overflow-x: hidden; }
 
   body {
     margin: 0;
@@ -61,7 +62,13 @@
     position: sticky; top: 0; z-index: 50;
     backdrop-filter: blur(10px);
     background: #10131acc;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid transparent;
+    transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  nav.top.scrolled {
+    background: #10131af2;
+    border-bottom-color: var(--border);
+    box-shadow: 0 8px 24px -16px #000a;
   }
   nav.top .wrap {
     display: flex; align-items: center; justify-content: space-between;
@@ -106,8 +113,8 @@
     padding: 13px 22px; border-radius: 10px; font-weight: 600; font-size: 14.5px;
     border: 1px solid transparent; cursor: pointer;
   }
-  .btn-primary { background: var(--cyan); color: #0b1622; }
-  .btn-primary:hover { text-decoration: none; opacity: .92; }
+  .btn-primary { background: var(--cyan); color: #0b1622; transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease; }
+  .btn-primary:hover { text-decoration: none; opacity: .95; transform: translateY(-2px); box-shadow: 0 10px 24px -10px var(--cyan-dim); }
   .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
   .btn-ghost:hover { text-decoration: none; border-color: var(--text-dim); }
 
@@ -125,22 +132,43 @@
     background-image: radial-gradient(circle at 1px 1px, #ffffff0d 1px, transparent 0);
     background-size: 22px 22px;
   }
-  .demo-toast {
-    position: absolute; right: 20px; bottom: 76px; width: 300px;
-    background: #1a1f2c; border: 1px solid #2f3648;
-    border-left: 4px solid var(--cyan);
-    border-radius: 12px; padding: 14px 16px;
-    box-shadow: 0 20px 40px -12px #000a;
-    opacity: 0; transform: translateY(16px) scale(.97);
-    animation: toastIn .55s cubic-bezier(.2,.9,.25,1) forwards;
-    animation-delay: .5s;
+ .demo-toast {
+  position: absolute; right: 16px; bottom: 66px; left: 16px;
+  max-width: 320px; margin-left: auto;
+  background: #171b24; border: 2px solid var(--green);
+  border-radius: 18px; padding: 18px 20px 14px;
+  box-shadow: 0 20px 40px -12px #000a;
+  opacity: 0; transform: translateY(16px) scale(.97);
+  animation: toastIn .55s cubic-bezier(.2,.9,.25,1) forwards;
+  animation-delay: .5s;
   }
-  .demo-toast .t-sender { font-size: 12.5px; color: var(--text-dim); margin-bottom: 4px; font-weight: 500; }
-  .demo-toast .t-msg { font-size: 14px; font-weight: 500; }
-  .demo-toast .t-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-  .demo-toast .t-arrows { color: var(--text-dim); font-size: 12px; letter-spacing: .1em; }
-  .demo-toast .t-close { color: var(--text-dim); font-size: 12px; }
+  .demo-toast .t-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .demo-toast .t-sender { font-size: 15px; font-weight: 700; color: var(--cyan); }
+  .demo-toast .t-close { color: var(--text-dim); font-size: 14px; line-height: 1; cursor: default; }
+  .demo-toast .t-msg { font-size: 15px; color: var(--text); margin-top: 10px; margin-bottom: 16px; }
+  .demo-toast .t-content { transition: opacity .25s ease; }
+  .demo-toast.swapping .t-content { opacity: 0; }
+  .demo-toast .t-nav { display: flex; justify-content: space-between; align-items: center; }
+  .demo-toast .t-navbtn {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--surface-2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 11px;
+  }
+  .demo-toast .t-page { font-size: 12.5px; color: var(--text-dim); }
+.demo-toast .t-time { text-align: right; font-size: 11px; color: var(--text-dim); margin-top: 8px; font-family: 'JetBrains Mono'; }
   @keyframes toastIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+  
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1.7s cubic-bezier(.16,.8,.24,1), transform .7s cubic-bezier(.16,.8,.24,1);
+  }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
 
   .demo-taskbar {
     position: absolute; left: 0; right: 0; bottom: 0; height: 46px;
@@ -155,6 +183,14 @@
     background: var(--red); color: #fff; font-size: 9.5px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
     border: 2px solid #0d0f15;
+    animation: badgePulse 2.4s ease-in-out infinite;
+  }
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 #ff4d6d55; }
+    50% { box-shadow: 0 0 0 5px #ff4d6d00; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tray-badge { animation: none; }
   }
   .demo-clock { color: var(--text-dim); font-size: 12px; font-family: 'JetBrains Mono'; }
 
@@ -170,8 +206,12 @@
   .section-desc { color: var(--text-dim); margin-top: 12px; font-size: 15.5px; }
 
   /* ---------- HOW IT WORKS ---------- */
-  .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .flow-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; position: relative; }
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .flow-step {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; position: relative;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .flow-step:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 12px 28px -14px #000c; }
   .flow-num { font-family: 'JetBrains Mono'; color: var(--cyan); font-size: 13px; margin-bottom: 14px; opacity: .8; }
   .flow-step h3 { font-size: 17px; margin-bottom: 8px; }
   .flow-step p { color: var(--text-dim); font-size: 14px; margin: 0; }
@@ -180,9 +220,22 @@
     .flow { position: relative; }
   }
 
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .demo-stage { height: 320px; order: -1; width: 100%; }
+    h1.headline { font-size: 34px; }
+    .nav-links a:not(.nav-cta) { display: none !important; }
+  }
+
+  
+
   /* ---------- FEATURES ---------- */
-  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .feat { background: var(--surface); padding: 28px 26px; }
+  .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .feat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 26px;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .feat:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 12px 28px -14px #000c; }
   .feat .icon { width: 34px; height: 34px; margin-bottom: 16px; color: var(--cyan); }
   .feat h3 { font-size: 15.5px; margin-bottom: 8px; }
   .feat p { color: var(--text-dim); font-size: 13.8px; margin: 0; }
@@ -204,11 +257,13 @@
   .tk-kw { color: #ff9d6c; } .tk-str { color: var(--green); } .tk-key { color: var(--cyan); } .tk-com { color: var(--text-dim); }
 
   /* ---------- DOWNLOAD ---------- */
-  .platforms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
   .plat-card {
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 28px; display: flex; flex-direction: column; gap: 16px;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
   }
+  .plat-card:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 12px 28px -14px #000c; }
   .plat-card .plat-icon { width: 30px; height: 30px; color: var(--cyan); }
   .plat-card h3 { font-size: 17px; }
   .plat-card p { color: var(--text-dim); font-size: 13.5px; margin: 0; flex-grow: 1; }
@@ -226,12 +281,18 @@
   .foot-links a:hover { color: var(--text); text-decoration: none; }
   .foot-brand { color: var(--text-dim); font-size: 13.5px; }
 
-  @media (max-width: 860px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .demo-stage { height: 320px; order: -1; }
-    h1.headline { font-size: 34px; }
-    .flow, .feat-grid, .platforms { grid-template-columns: 1fr; }
-    .nav-links a:not(.nav-cta) { display: none; }
+  @media (max-width: 480px) {
+    .hero { padding: 64px 0 56px; }
+    .demo-stage { height: 260px; }
+    .demo-toast { padding: 16px 16px 12px; }
+    .demo-toast .t-msg { font-size: 14px; }
+    h1.headline { font-size: 28px; }
+    .sub { font-size: 15.5px; }
+    section { padding: 56px 0; }
+    h2.section-title { font-size: 26px; }
+    .code-body { font-size: 12px; padding: 16px; }
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
   }
 </style>
 </head>
@@ -257,7 +318,7 @@
     <div>
       <span class="eyebrow"><span class="dot"></span>Открытый исходный код · MIT</span>
       <h1 class="headline">Уведомления,<br>которые <span class="accent">долетают</span>.</h1>
-      <p class="sub">Информер принимает HTTP-запрос от 1С, кассы или скрипта — и через долю секунды на экране уже тост. Без облака, без посредников, без лишних окон.</p>
+      <p class="sub">Информер принимает HTTP-запрос от 1С, кассы или скрипта — и через долю секунды на экране уже уведомление. Без облака, без посредников, без лишних окон.</p>
       <div class="cta-row">
         <a href="https://github.com/rbsoft-dev/Informer/releases" class="btn btn-primary">Скачать для своей ОС</a>
         <a href="#how" class="btn btn-ghost">Как это работает</a>
@@ -265,21 +326,19 @@
     </div>
 
     <div class="demo-stage" aria-hidden="true">
-      <div class="demo-toast">
-        <div class="t-sender">1С — Основная база</div>
-        <div class="t-msg">Новый документ проведён</div>
-        <div class="t-nav">
-          <span class="t-arrows">◀ &nbsp; ▶</span>
+      <div class="demo-toast" id="demoToast">
+        <div class="t-head">
+          <span class="t-sender" id="toastSender">1С — Основная база</span>
           <span class="t-close">✕</span>
         </div>
-      </div>
-      <div class="demo-taskbar">
-        <span class="demo-clock">14:07</span>
-        <div class="tray-icon">
-          <img src="tray-icon.ico" alt="tray" width="22" height="22">
-          <span class="tray-badge">3</span>
+        <div class="t-msg" id="toastMsg">Новый документ проведён</div>
+        <div class="t-nav">
+          <span class="t-navbtn">◀</span>
+          <span class="t-page" id="toastPage">1 из 3</span>
+          <span class="t-navbtn">▶</span>
         </div>
-          <span class="tray-badge">3</span>
+        <div class="t-time" id="toastTime">16:00:50</div>
+      </div>
         </div>
       </div>
     </div>
@@ -288,26 +347,26 @@
 
 <section id="how">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-label">Три шага</span>
-      <h2 class="section-title">От запроса до тоста на экране</h2>
+      <h2 class="section-title">От запроса до уведомления на экране</h2>
       <p class="section-desc">Никакой настройки инфраструктуры — просто HTTP-запрос, который умеет отправить что угодно: 1С, cron-скрипт, кассовый драйвер.</p>
     </div>
     <div class="flow">
-      <div class="flow-step">
+      <div class="flow-step reveal">
         <div class="flow-num">01</div>
         <h3>Отправь POST-запрос</h3>
         <p>Обычный JSON на <code>/api/notify</code> — заголовок, текст, необязательный тип важности.</p>
       </div>
-      <div class="flow-step">
+      <div class="flow-step reveal">
         <div class="flow-num">02</div>
-        <h3>Тост появляется мгновенно</h3>
+        <h3>Уведомление появляется мгновенно</h3>
         <p>Всплывает в углу экрана. Несколько подряд — листаются стрелками, не перебивая друг друга.</p>
       </div>
-      <div class="flow-step">
+      <div class="flow-step reveal">
         <div class="flow-num">03</div>
         <h3>Остаётся в истории</h3>
-        <p>Полный список с фильтром по отправителю — ничего не теряется, даже если тост закрыли не глядя.</p>
+        <p>Полный список с фильтром по отправителю — ничего не теряется, даже если уведомление закрыли не глядя.</p>
       </div>
     </div>
   </div>
@@ -315,37 +374,37 @@
 
 <section id="features">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-label">Возможности</span>
       <h2 class="section-title">Сделан для удобной работы</h2>
     </div>
     <div class="feat-grid">
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><circle cx="9" cy="16.5" r="0" /><path d="M3 9h18"/></svg>
-        <h3>Один тост, не башня окон</h3>
+        <h3>Одно окно уведомления, не башня окон</h3>
         <p>Новые сообщения не перебивают то, что вы уже читаете — листайте стрелками, когда будете готовы.</p>
       </div>
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
         <h3>История с фильтром</h3>
         <p>Полный список уведомлений по отправителю, с отметкой прочитанного и удалением.</p>
       </div>
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
         <h3>Свой язык без пересборки</h3>
         <p>Переводы — обычные текстовые .po-файлы. Новый язык скачивается прямо из Настроек.</p>
       </div>
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
         <h3>API-ключ и анти-спам</h3>
         <p>Опциональная защита эндпоинта уведомлений и лимит запросов по IP из коробки.</p>
       </div>
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <h3>Windows, Linux, macOS</h3>
         <p>Один и тот же процесс, self-contained сборка под каждую платформу — включая Apple Silicon.</p>
       </div>
-      <div class="feat">
+      <div class="feat reveal">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
         <h3>Бесплатно и открыто</h3>
         <p>Лицензия MIT — используйте, меняйте, встраивайте в свои проекты без ограничений.</p>
@@ -356,12 +415,12 @@
 
 <section id="api">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-label">Интеграция</span>
       <h2 class="section-title">Работает с тем, что у вас уже есть</h2>
       <p class="section-desc">Любая система, способная отправить HTTP-запрос — 1С, PowerShell, Python, cron.</p>
     </div>
-    <div class="code-card">
+    <div class="code-card reveal">
       <div class="code-head">
         <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
         <span class="fname">notify.sh</span>
@@ -380,24 +439,24 @@
 
 <section id="download">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-label">Скачать</span>
       <h2 class="section-title">Установка под свою систему</h2>
     </div>
     <div class="platforms">
-      <div class="plat-card">
+      <div class="plat-card reveal">
         <svg class="plat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
         <h3>Windows</h3>
         <p>Установщик без прав администратора. Windows 7 SP1 и новее.</p>
         <a class="plat-btn" href="https://github.com/rbsoft-dev/Informer/releases/latest">Скачать .exe</a>
       </div>
-      <div class="plat-card">
+      <div class="plat-card reveal">
         <svg class="plat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2a5 5 0 015 5v4a5 5 0 01-10 0V7a5 5 0 015-5z"/><path d="M7 14l-2 7M17 14l2 7M9 21h6"/></svg>
         <h3>Linux</h3>
         <p>.deb-пакет — ставится через <code>apt install</code>, зависимости подтянутся сами.</p>
         <a class="plat-btn" href="https://github.com/rbsoft-dev/Informer/releases/latest">Скачать .deb</a>
       </div>
-      <div class="plat-card">
+      <div class="plat-card reveal">
         <svg class="plat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.5 3c.5 2-1 3.5-2.5 3.5S12 5 12.5 3c1.5 0 3 0 4 0z"/><path d="M18 21c-1.5 1-3 1-4.5.3-1.5.7-3 .7-4.5-.3C6 19 4 15 4 12c0-3 2-5 4.5-5 1.2 0 2 .5 3 .5s1.8-.5 3-.5c1.8 0 3.3 1 4 2.5-3.5 2-2.8 6.5 1.5 8-1 1.7-1.7 2.7-3 3.5z"/></svg>
         <h3>macOS</h3>
         <p>Intel и Apple Silicon. Пакет не подписан — потребуется разрешить запуск один раз.</p>
@@ -418,6 +477,84 @@
     </div>
   </div>
 </footer>
+<script>
+(function () {
+  var toast = document.getElementById('demoToast');
+  if (!toast) return;
 
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return; // уважаем настройку ОС — оставляем один статичный пример
+
+  var examples = [
+    { sender: '1С — Основная база', msg: 'Новый документ проведён', color: 'var(--green)', page: '1 из 3', time: '16:00:50' },
+    { sender: 'Касса №2', msg: 'Закончилась чековая лента', color: 'var(--amber)', page: '2 из 3', time: '15:42:03' },
+    { sender: 'Сервер ККМ', msg: 'Ошибка связи с устройством', color: 'var(--red)', page: '3 из 3', time: '15:12:37' }
+  ];
+
+  var i = 0;
+  var sender = document.getElementById('toastSender');
+  var msg = document.getElementById('toastMsg');
+  var page = document.getElementById('toastPage');
+  var time = document.getElementById('toastTime');
+
+  function swap() {
+    i = (i + 1) % examples.length;
+    toast.classList.add('swapping');
+    setTimeout(function () {
+      var e = examples[i];
+      sender.textContent = e.sender;
+      msg.textContent = e.msg;
+      page.textContent = e.page;
+      time.textContent = e.time;
+      toast.style.borderColor = e.color;
+      toast.classList.remove('swapping');
+    }, 250);
+  }
+
+  setInterval(swap, 3800);
+})();
+</script>
+<script>
+// Плавное появление элементов при прокрутке — один раз для каждого,
+// без повторного скрытия при обратной прокрутке (спокойнее для восприятия).
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  if (!items.length) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    items.forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry, groupIndex) {
+      if (entry.isIntersecting) {
+        // Небольшая ступенчатая задержка для элементов, появляющихся в сетке
+        // одновременно (карточки в одном ряду) — не разом, а друг за другом.
+        var delay = Array.prototype.indexOf.call(
+          entry.target.parentElement.children, entry.target
+        ) * 170;
+        setTimeout(function () {
+          entry.target.classList.add('is-visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  items.forEach(function (el) { observer.observe(el); });
+})();
+
+// Навигация темнеет при прокрутке вниз.
+(function () {
+  var nav = document.querySelector('nav.top');
+  if (!nav) return;
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+})();
+</script>
+</body>
 </body>
 </html>
