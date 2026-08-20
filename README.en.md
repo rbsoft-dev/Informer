@@ -546,6 +546,14 @@ protected by the API key** — see [Security](#security).
   (`xattr -d com.apple.quarantine`)
 - If Cyrillic or other non-ASCII text shows up as "�" — check the file's encoding
   (`.po`, `lang.ini`) — it must be **UTF-8**, not "ANSI"
+- **On GNOME (Fedora, RHEL/CentOS, etc.) the tray icon doesn't appear at all** —
+  starting with GNOME Shell 3.26, the classic system tray was removed from GNOME by
+  default. Informer is a tray-only app (no main window), so without the icon it's
+  unusable. **Fix**: install the
+  [AppIndicator and KStatusNotifierItem Support](https://extensions.gnome.org/extension/615/appindicator-support/)
+  extension (`sudo dnf install gnome-shell-extension-appindicator` on Fedora), enable
+  it, restart GNOME Shell and Informer itself. Doesn't affect Cinnamon/KDE/XFCE — tray
+  works there without extra steps.
 
 ## License and authorship
 
