@@ -61,6 +61,7 @@ install -m 644 %{SOURCE2} %{buildroot}/usr/share/icons/hicolor/256x256/apps/info
 %post
 gtk-update-icon-cache -f /usr/share/icons/hicolor >/dev/null 2>&1 || true
 update-desktop-database /usr/share/applications >/dev/null 2>&1 || true
+chmod -R a+rwX /usr/lib/informer >/dev/null 2>&1 || true
 
 %changelog
 * Mon Aug 17 2026 Evgeniy Ershov <online@rbsoft.ru> - 1.0.0-1
