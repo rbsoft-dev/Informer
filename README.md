@@ -536,6 +536,14 @@ API-ключом** — см. [Безопасность](#безопасност�
   com.apple.quarantine`)
 - Если кириллица/другой не-ASCII текст отображается как "�" — проверь кодировку файла
   (`.po`, `lang.ini`) — должна быть **UTF-8**, не "ANSI"
+- **На GNOME (Fedora, RHEL/CentOS и др.) иконка в трее не появляется вообще** —
+  начиная с GNOME Shell 3.26, классический системный трей удалён из GNOME по умолчанию.
+  Информер — исключительно трей-приложение (без главного окна), поэтому без иконки
+  им невозможно пользоваться. **Решение**: установи расширение
+  [AppIndicator and KStatusNotifierItem Support](https://extensions.gnome.org/extension/615/appindicator-support/)
+  (`sudo dnf install gnome-shell-extension-appindicator` на Fedora), включи его,
+  перезапусти GNOME Shell и сам Информер. Не касается Cinnamon/KDE/XFCE — там трей
+  работает без дополнительных действий.
 
 ## Лицензия и авторство
 
